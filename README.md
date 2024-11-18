@@ -70,16 +70,6 @@ Modul ini memungkinkan pengguna untuk memasukan produk yang diinginkan ke dalam 
 
 Dikerjakan oleh: Kadek Savitri
 
-### 6. Wishlist
-
-Fitur-fitur dari modul ini meliputi:
-
-- Pengguna dapat melihat daftar produk yang telah disimpan dalam wishlist mereka.
-- Menambah produk ke wishlist dari halaman produk atau katalog dengan sekali klik.
-- Pengguna dapat menghapus produk dari wishlist.
-
-Dikerjakan oleh : Kadek Savitri
-
 ## Peran atau aktor pengguna aplikasi 
 
 ### Pemilik Toko
