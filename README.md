@@ -82,10 +82,10 @@ Pengguna dapat mencari produk yang ingin mereka cari, melihat profil toko maupun
 
 ## Alur pengintegrasian dengan web service untuk terhubung dengan aplikasi web yang sudah dibuat saat Proyek Tengah Semester
 
-### 1. Aplikasi mobile mengambil data dari web service yang telah di-deploy melalui URL yang disediakan.
-### 2. Dalam file Dart, URL tersebut diparsing menggunakan Uri.parse() untuk kemudian melakukan request HTTP GET  dengan header application/json.
-### 3. Data yang berformat JSON tersebut di-decode menggunakan fungsi jsonDecode(), yang mengubahnya menjadi struktur objek Dart.
-### 4. Setelah data di-decode, data tersebut dikonversi ke dalam model Dart yang sudah didefinisikan(class-model).
-### 5. Pengambilan data dari web service terjadi secara asinkron. Untuk menampilkan data ini di Flutter, digunakan widget bernama FutureBuilder.
+1. Aplikasi mobile mengambil data dari web service yang telah di-deploy melalui URL yang disediakan.
+2. Dalam file Dart, URL tersebut diparsing menggunakan Uri.parse() untuk kemudian melakukan request HTTP GET  dengan header application/json.
+3. Data yang berformat JSON tersebut di-decode menggunakan fungsi jsonDecode(), yang mengubahnya menjadi struktur objek Dart.
+4. Setelah data di-decode, data tersebut dikonversi ke dalam model Dart yang sudah didefinisikan(class-model).
+5. Pengambilan data dari web service terjadi secara asinkron. Untuk menampilkan data ini di Flutter, digunakan widget bernama FutureBuilder.
 
 ## Tautan deployment aplikasi
