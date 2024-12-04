@@ -88,4 +88,8 @@ Pengguna dapat mencari produk yang ingin mereka cari, melihat profil toko maupun
 4. Setelah data di-decode, data tersebut dikonversi ke dalam model Dart yang sudah didefinisikan(class-model).
 5. Pengambilan data dari web service terjadi secara asinkron. Untuk menampilkan data ini di Flutter, digunakan widget bernama FutureBuilder.
 
+## Berita Acara
+
+https://docs.google.com/spreadsheets/d/1N8S_MYg_wuZxCq1zvXGhb4QvITe9sBTcb45nuWGa2DE/edit?gid=1728856645#gid=1728856645
+
 ## Tautan deployment aplikasi
