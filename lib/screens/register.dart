@@ -15,9 +15,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  String? _selectedRole;
-
+  String? _selectedRole = "User";
   final List<String> _roles = ['User', 'Owner'];
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,42 +144,41 @@ class _RegisterPageState extends State<RegisterPage> {
                       String username = _usernameController.text;
                       String password1 = _passwordController.text;
                       String password2 = _confirmPasswordController.text;
-                      // if (_selectedRole == null || _selectedRole!.isEmpty) {
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(
-                      //       content: Text('Please select a role.'),
-                      //       backgroundColor: Colors.red,
-                      //     ),
-                      //   );
-                      //   return; // Stop execution if no role is selected
-                      // }
-                      final response = await request.postJson(
+                      String role = _selectedRole!;
+                      try {
+                        final response = await request.postJson(
                           "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/register-flutter/",
                           jsonEncode({
                             "username": username,
                             "password1": password1,
                             "password2": password2,
-                            "role": _selectedRole,
-                          }));
-                      if (context.mounted) {
-                        if (response['status'] == 'success') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Successfully registered!'),
-                            ),
-                          );
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginPage()),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Failed to register!'),
-                            ),
-                          );
+                            "role": role,
+                          }),
+                        );
+                        if (context.mounted) {
+                          if (response['status'] == 'success') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Successfully registered!'),
+                              ),
+                            );
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginPage()),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Failed to register!'),
+                              ),
+                            );
+                          }
                         }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Request failed: $e')),
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
