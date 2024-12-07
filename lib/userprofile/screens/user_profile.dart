@@ -5,6 +5,7 @@ import 'package:olehbali_mobile/userprofile/widgets/profile_buttons.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class MyProfilePage extends StatefulWidget {
   @override
@@ -25,10 +26,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
   @override
   void initState() {
     super.initState();
-    fetchUserProfile(); // Panggil API untuk mengambil data awal
+    var request = CookieRequest();
+    fetchUserProfile(request); // Panggil API untuk mengambil data awal
   }
 
-  Future<void> fetchUserProfile() async {
+  Future<void> fetchUserProfile(CookieRequest request) async {
     // Ambil data dari server
     // var url = Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api/profile/');
     var url = Uri.parse('http://127.0.0.1:8000/userprofile/api/profile');
@@ -38,7 +40,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
       var jsonResponse = json.decode(response.body);
       if (jsonResponse['status'] == 'success') {
         setState(() {
-          userProfile = jsonResponse['data'];
+           userProfile = {
+            'avatarUrl': jsonResponse['data']['avatar_url'] ?? '',
+            'name': jsonResponse['data']['name'] ?? '',
+            'phoneNumber': jsonResponse['data']['phone_number'] ?? '',
+            'email': jsonResponse['data']['email'] ?? '',
+            'birthdate': jsonResponse['data']['birthdate'] ?? '',
+            'role': jsonResponse['data']['role'] ?? '',
+          };
         });
       }
     } else {
@@ -65,7 +74,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
           children: [
             ProfileAvatar(avatarUrl: userProfile['avatarUrl']),
             const SizedBox(height: 16),
-            _buildTextField('Nama', userProfile['name']),
+            _buildTextField('Name', userProfile['name']),
             _buildTextField('Phone Number', userProfile['phoneNumber']),
             _buildTextField('Email', userProfile['email']),
             _buildTextField('Birthdate', userProfile['birthdate']),
