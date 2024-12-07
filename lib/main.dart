@@ -1,6 +1,5 @@
 import 'package:olehbali_mobile/screens/login.dart';
 import 'package:flutter/material.dart';
-import 'package:olehbali_mobile/screens/menu.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 

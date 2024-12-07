@@ -7,8 +7,8 @@ class ProfileAvatarEditor extends StatelessWidget {
   const ProfileAvatarEditor({
     required this.currentAvatarUrl,
     required this.onAvatarChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class ProfileAvatarEditor extends StatelessWidget {
           onPressed: () async {
             // Simulate avatar change (e.g., open file picker or camera)
             // Replace this with actual implementation
-            final newAvatarUrl = 'https://new-avatar-url.com/avatar.jpg';
+            const newAvatarUrl = 'https://new-avatar-url.com/avatar.jpg';
             onAvatarChanged(newAvatarUrl);
           },
           child: const Text('Change Avatar'),

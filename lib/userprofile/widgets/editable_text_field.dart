@@ -9,8 +9,8 @@ class EditableTextField extends StatelessWidget {
     required this.controller,
     required this.label,
     this.keyboardType,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

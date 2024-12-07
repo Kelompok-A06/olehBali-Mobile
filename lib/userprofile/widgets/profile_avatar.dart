@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ProfileAvatar extends StatelessWidget {
   final String avatarUrl;
 
-  const ProfileAvatar({required this.avatarUrl, Key? key}) : super(key: key);
+  const ProfileAvatar({required this.avatarUrl, super.key});
 
   @override
   Widget build(BuildContext context) {

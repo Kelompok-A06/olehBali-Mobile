@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 class ProfileButtons extends StatelessWidget {
   final String role;
   final VoidCallback onEditProfile;
-  final VoidCallback onMyWishlist; 
+  final VoidCallback onMyWishlist;
   final VoidCallback onDeleteAccount;
 
   const ProfileButtons({
-    Key? key,
+    super.key,
     required this.role,
     required this.onEditProfile,
     required this.onMyWishlist,
     required this.onDeleteAccount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
