@@ -42,14 +42,46 @@ class _ReviewPageState extends State<ReviewPage>{
             if (snapshot.data == null) {
               return const Center(child: CircularProgressIndicator(),);
             } else {
-                if (!snapshot.hasData) {
-                  return const Column(
+                if (snapshot.data!.isEmpty) {
+                  return  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Belum ada yang meninggalkan review. Jadilah yang pertama untuk menambahkannya!',
-                        style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0), // Add horizontal padding
+                        child: Text(
+                          'Belum ada yang meninggalkan review untuk produk manapun. Jadilah yang pertama untuk menambahkannya!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 79, 71, 70),
+                          ),
+                        ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 245, 245, 245),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: const Text(
+                          'Ayo beri ulasan pertama!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 255, 105, 70), // Bright accent color
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 } else {
