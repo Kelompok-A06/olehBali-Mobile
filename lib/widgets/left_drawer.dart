@@ -63,6 +63,18 @@ class LeftDrawer extends StatelessWidget {
                   ));
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.reviews),
+            title: const Text('My Account'),
+            // Bagian redirection ke MyHomePage
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReviewPage(),
+                  ));
+            },
+          ),
         ],
       ),
     );
