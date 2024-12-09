@@ -65,7 +65,7 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.reviews),
-            title: const Text('My Account'),
+            title: const Text('Lihat apa yang dikatakan orang-orang!'),
             // Bagian redirection ke MyHomePage
             onTap: () {
               Navigator.pushReplacement(
