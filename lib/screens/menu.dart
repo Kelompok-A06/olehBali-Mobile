@@ -18,21 +18,42 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold menyediakan struktur dasar halaman dengan AppBar dan body.
     return Scaffold(
-      // AppBar adalah bagian atas halaman yang menampilkan judul.
       appBar: AppBar(
-        // Judul aplikasi "Mental Health Tracker" dengan teks putih dan tebal.
-        title: const Text(
-          'OlehBali',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/logo_olehBali.png', // Replace with your actual logo path
+              fit: BoxFit.contain,
+              height: 42, // Adjust the height as needed
+            ),
+            const SizedBox(width: 8), // Spacing between the logo and the text
+            RichText(
+              text: const TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Oleh", // First part of the title
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 3, 164, 193), // First color
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "Bali", // Second part of the title
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 254, 150, 66), // Second color
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        // Warna latar belakang AppBar diambil dari skema warna tema aplikasi.
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
       ),
       drawer: const LeftDrawer(),
       // Body halaman dengan padding di sekelilingnya.
@@ -65,7 +86,7 @@ class MyHomePage extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Text(
-                      'Welcome to EasyShop',
+                      'Welcome to OlehBali',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,

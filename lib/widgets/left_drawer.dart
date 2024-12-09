@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
 import 'package:olehbali_mobile/screens/menu.dart';
 
 class LeftDrawer extends StatelessWidget {
@@ -16,7 +17,7 @@ class LeftDrawer extends StatelessWidget {
             child: const Column(
               children: [
                 Text(
-                  'EasyShop',
+                  'OlehBali',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -46,6 +47,17 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MyHomePage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.reviews),
+            title: const Text('Lihat Review Orang-orang!'),
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReviewPage(),
                   ));
             },
           ),
