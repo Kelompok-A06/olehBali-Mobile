@@ -18,7 +18,6 @@ class _RegisterPageState extends State<RegisterPage> {
   String? _selectedRole = "user";
   final List<String> _roles = ['user', 'owner'];
 
-
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
@@ -147,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       String role = _selectedRole!;
                       try {
                         final response = await request.postJson(
-                          "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/register-flutter/",
+                          "http://127.0.0.1:8000/register-flutter/",
                           jsonEncode({
                             "username": username,
                             "password1": password1,
