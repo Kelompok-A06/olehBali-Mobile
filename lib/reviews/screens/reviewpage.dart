@@ -33,7 +33,7 @@ class _ReviewPageState extends State<ReviewPage>{
     return Scaffold(
       appBar: AppBar(
         title: const Text("Reviews"),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Colors.white,
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
