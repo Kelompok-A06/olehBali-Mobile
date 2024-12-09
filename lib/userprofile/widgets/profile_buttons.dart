@@ -40,6 +40,7 @@ class ProfileButtons extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
+        if (role != 'owner') 
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(

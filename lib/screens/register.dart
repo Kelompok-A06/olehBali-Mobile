@@ -15,8 +15,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  String? _selectedRole = "User";
-  final List<String> _roles = ['User', 'Owner'];
+  String? _selectedRole = "user";
+  final List<String> _roles = ['user', 'owner'];
 
 
   @override

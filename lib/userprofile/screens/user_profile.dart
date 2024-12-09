@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olehbali_mobile/userprofile/screens/delete_account_page.dart';
 import 'package:olehbali_mobile/userprofile/screens/edit_profile_page.dart';
 import 'package:olehbali_mobile/userprofile/widgets/profile_avatar.dart';
 import 'package:olehbali_mobile/userprofile/widgets/profile_buttons.dart';
@@ -20,9 +21,9 @@ class MyProfilePage extends StatefulWidget {
 class _MyProfilePageState extends State<MyProfilePage> {
   // Data pengguna sebagai variabel biasa
   Map<String, dynamic> userProfile = {
-    'avatarUrl': '',
+    'avatar': '',
     'name': '',
-    'phoneNumber': '',
+    'phone_number': '',
     'email': '',
     'birthdate': '',
     'role': '',
@@ -40,25 +41,33 @@ class _MyProfilePageState extends State<MyProfilePage> {
     // var url = Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api/profile/');
     Profile profile = Profile(model: "none", pk: 1, fields: Fields(user: 1, name: "Fail", phoneNumber: "Fail", email: "Fail", birthdate: "Fail", avatar: "Fail"));
     try {
-      final response = await request.get('http://127.0.0.1:8000/userprofile/api/profile/');
-      // Melakukan decode response menjadi bentuk json
+      final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
       print(response);
       profile = Profile.fromJson(response[0]);
+       final roleResponse = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
       // Null check for each field before assignment
-      userProfile["avatarURL"] = profile.fields.avatar;
-      userProfile["name"]  = profile.fields.name;
-      userProfile["phoneNumber"] = profile.fields.phoneNumber;
-      userProfile["email"] = profile.fields.email;
-      userProfile["birthdate"] = profile.fields.birthdate ?? 'Unknown';
+       String avatarUrl = profile.fields.avatar ?? '';
+      if (avatarUrl.isNotEmpty && !avatarUrl.startsWith('http')) {
+        avatarUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$avatarUrl';
+      }
+      
+    // userProfile["avatar"] = avatarUrl;
+      userProfile["name"] = profile.fields.name ?? '';
+      userProfile["phone_number"] = profile.fields.phoneNumber ?? '';
+      userProfile["email"] = profile.fields.email ?? '';
+      userProfile["birthdate"] = profile.fields.birthdate ?? 'YYYY-MM-DD';
+      userProfile["role"] = roleResponse['role'] ?? 'user';
+
       return profile;
     } catch (e) {
       print(e);
       print(profile);
-      userProfile["avatarURL"] = profile.fields.avatar;
-      userProfile["name"]  = profile.fields.name;
-      userProfile["phoneNumber"] = profile.fields.phoneNumber;
-      userProfile["email"] = profile.fields.email;
-      userProfile["birthdate"] = profile.fields.birthdate;
+      userProfile["avatar"] = profile.fields.avatar ?? '';
+      userProfile["name"] = profile.fields.name ?? '';
+      userProfile["phone_number"] = profile.fields.phoneNumber ?? '';
+      userProfile["email"] = profile.fields.email ?? '';
+      userProfile["birthdate"] = profile.fields.birthdate ?? 'YYYY-MM-DD';
+      userProfile["role"] = 'user';
       print(userProfile);
       return profile;
     }
@@ -88,10 +97,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  ProfileAvatar(avatarUrl: userProfile['avatarUrl']),
+                   ProfileAvatar(
+                    avatarUrl: userProfile['avatar'] ?? '',
+                  ),
                   const SizedBox(height: 16),
                   _buildTextField('Name', userProfile['name']),
-                  _buildTextField('Phone Number', userProfile['phoneNumber']),
+                  _buildTextField('Phone Number', userProfile['phone_number']),
                   _buildTextField('Email', userProfile['email']),
                   _buildTextField('Birthdate', userProfile['birthdate']),
                   const SizedBox(height: 32),
@@ -117,7 +128,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       Navigator.pushNamed(context, '/wishlist');
                     },
                     onDeleteAccount: () {
-                      Navigator.pushNamed(context, '/delete-account');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DeleteAccountPage(),
+                        ),
+                      );
                     },
                   ),
                 ],

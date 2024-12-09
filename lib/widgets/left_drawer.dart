@@ -7,13 +7,6 @@ class LeftDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Contoh data dummy, ganti dengan data dinamis (misalnya dari Provider)
-    // final String avatarUrl = 'https://your-avatar-url.com/avatar.jpg';
-    // final String name = 'John Doe';
-    // final String phoneNumber = '081234567890';
-    // final String email = 'johndoe@example.com';
-    // final String birthdate = '1990-01-01';
-    // final String role = 'user'; // Bisa juga 'owner'
     return Drawer(
       child: ListView(
         children: [
