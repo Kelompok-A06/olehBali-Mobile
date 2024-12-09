@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
 import 'package:olehbali_mobile/screens/menu.dart';
 import 'package:olehbali_mobile/userprofile/screens/user_profile.dart';
 
@@ -17,7 +18,7 @@ class LeftDrawer extends StatelessWidget {
             child: const Column(
               children: [
                 Text(
-                  'EasyShop',
+                  'OlehBali',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,

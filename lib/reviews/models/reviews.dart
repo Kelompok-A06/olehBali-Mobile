@@ -34,28 +34,33 @@ class Reviews {
 
 class Fields {
   int user;
-  int product;
   int ratings;
   String comments;
+  String username;
+  String productName;
+
 
   Fields({
     required this.user,
-    required this.product,
     required this.ratings,
     required this.comments,
+    required this.username,
+    required this.productName,
   });
 
   factory Fields.fromJson(Map<String, dynamic> json) => Fields(
     user: json["user"],
-    product: json["product"],
     ratings: json["ratings"],
     comments: json["comments"],
+    username: json["username"],
+    productName: json["productName"],
   );
 
   Map<String, dynamic> toJson() => {
     "user": user,
-    "product": product,
     "ratings": ratings,
     "comments": comments,
+    "username": username,
+    "productName": productName,
   };
 }
