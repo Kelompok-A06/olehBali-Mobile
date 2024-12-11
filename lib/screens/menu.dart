@@ -151,7 +151,7 @@ class InfoCard extends StatelessWidget {
     this.content1,
     this.content2,
   });
-
+  // TODO FIX OVERFLOWING TEXT
   @override
   Widget build(BuildContext context) {
     return Card(
