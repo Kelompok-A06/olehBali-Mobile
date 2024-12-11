@@ -171,6 +171,7 @@ class InfoCard extends StatelessWidget {
           // Text overlay
           Positioned(
             right: 16,
+            width: MediaQuery.of(context).size.width / 1.2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
@@ -191,23 +192,25 @@ class InfoCard extends StatelessWidget {
                     color: Colors.white, // White text for better contrast
                   ),
                 ),
-                Text(
-                  content,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white, // White text for better contrast
-                  ),
-                  softWrap: true,
-                  overflow: TextOverflow.visible,
+                Flexible(
+                    child: Text(
+                      content,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.white, // White text for better contrast
+                      ),
+                      textAlign: TextAlign.right,
+                    ),
                 ),
                 if (content1 != null)
                   Flexible(
                     child: Text(
                       content1!,
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.white, // White text for better contrast
                       ),
+                      // textAlign: TextAlign.right,
                     ),
                   ),
                 if (content2 != null)
@@ -215,7 +218,7 @@ class InfoCard extends StatelessWidget {
                       child: Text(
                         content2!,
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
                           color: Colors.white, // White text for better contrast
                         ),
                       ),
