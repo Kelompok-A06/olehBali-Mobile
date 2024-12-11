@@ -138,12 +138,14 @@ class _ReviewPageState extends State<ReviewPage>{
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    review.fields.comments,
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.black54,
-                                    ),
+                                  Flexible(
+                                    child: Text(
+                                      review.fields.comments,
+                                      style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.black54,
+                                      ),
+                                    )
                                   ),
                                   Container(
                                     padding:
