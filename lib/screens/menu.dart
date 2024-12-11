@@ -170,7 +170,7 @@ class InfoCard extends StatelessWidget {
           ),
           // Text overlay
           Positioned(
-            right: 32,
+            right: 16,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
