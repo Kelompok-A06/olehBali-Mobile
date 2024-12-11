@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:olehbali_mobile/widgets/dummycard.dart';
+import 'package:olehbali_mobile/userprofile/models/profile.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class MyHomePage extends StatelessWidget {
-  final String npm = 'DUMMY'; // NPM
-  final String name = 'DUMMY'; // Nama
-  final String className = 'DUMMY'; // Kelas
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
 
   final List<ItemHomepage> items = [
     ItemHomepage("DUMMY", Icons.view_day_outlined, Colors.blueAccent),
@@ -13,10 +21,15 @@ class MyHomePage extends StatelessWidget {
     ItemHomepage("Logout", Icons.logout, Colors.redAccent),
   ];
 
-  MyHomePage({super.key});
+  Future<String> fetchUserName(CookieRequest request) async {
+    final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
+    final profile = Profile.fromJson(response[0]);
+    return profile.fields.name;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -28,23 +41,27 @@ class MyHomePage extends StatelessWidget {
             ),
             const SizedBox(width: 8), // Spacing between the logo and the text
             RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
                   TextSpan(
                     text: "Oleh", // First part of the title
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 3, 164, 193),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
+                    style: GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                        color: Color.fromARGB(255, 3, 164, 193),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    )
                   ),
                   TextSpan(
                     text: "Bali", // Second part of the title
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 254, 150, 66),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
+                    style: GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                        color: Color.fromARGB(255, 254, 150, 66),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    )
                   ),
                 ],
               ),
@@ -55,47 +72,63 @@ class MyHomePage extends StatelessWidget {
         iconTheme: const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
       ),
       drawer: const LeftDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InfoCard(title: 'DUMMY', content: npm, imageUrl: 'assets/images/purahome.png'),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            Center(
+      body: FutureBuilder(
+        future: fetchUserName(request),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
+            return const Center(child: CircularProgressIndicator(),);
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: Text(
-                      'Welcome to OlehBali',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      InfoCard(
+                        title: 'Halo ${snapshot.data}!',
+                        subTitle: 'Find Your Souvenirs',
+                        content: "We give you Bali's best souvenirs in Denpasar.",
+                        content1: 'Discover a wide range of unique and exclusive products.',
+                        content2: 'Go, shopping!',
+                        imageUrl : 'assets/images/purahome.png'
                       ),
-                    ),
+                    ],
                   ),
-                  GridView.count(
-                    primary: true,
-                    padding: const EdgeInsets.all(20),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 3,
-                    shrinkWrap: true,
-                    children: items.map((ItemHomepage item) {
-                      return ItemCard(item);
-                    }).toList(),
+                  const SizedBox(height: 16.0),
+                  Center(
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 16.0),
+                          child: Text(
+                            'Welcome to OlehBali',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ),
+                        GridView.count(
+                          primary: true,
+                          padding: const EdgeInsets.all(20),
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          crossAxisCount: 3,
+                          shrinkWrap: true,
+                          children: items.map((ItemHomepage item) {
+                            return ItemCard(item);
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
+            );
+          }
+        }
       ),
     );
   }
@@ -103,7 +136,10 @@ class MyHomePage extends StatelessWidget {
 
 class InfoCard extends StatelessWidget {
   final String title;
+  final String subTitle;
   final String content;
+  final String? content1;
+  final String? content2;
   final String imageUrl;
 
   const InfoCard({
@@ -111,6 +147,9 @@ class InfoCard extends StatelessWidget {
     required this.title,
     required this.content,
     required this.imageUrl,
+    required this.subTitle,
+    this.content1,
+    this.content2,
   });
 
   @override
@@ -118,40 +157,69 @@ class InfoCard extends StatelessWidget {
     return Card(
       elevation: 2.0,
       child: Stack(
-        alignment: Alignment.bottomLeft,
+        alignment: Alignment.centerRight,
         children: [
-          // Image background
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.asset(
               imageUrl,
-              width: MediaQuery.of(context).size.width / 3.5,
-              height: 120, // Adjust height as needed
+              width: MediaQuery.of(context).size.width / 1.2,
+              height: 175, // Adjust height as needed
               fit: BoxFit.cover,
             ),
           ),
           // Text overlay
           Positioned(
-            bottom: 8,
-            left: 8,
+            right: 32,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 20,
+                    color: Colors.white, // White text for better contrast
+                  ),
+                ),
+                Text(
+                  subTitle,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
                     color: Colors.white, // White text for better contrast
                   ),
                 ),
                 Text(
                   content,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: Colors.white, // White text for better contrast
                   ),
+                  softWrap: true,
+                  overflow: TextOverflow.visible,
                 ),
+                if (content1 != null)
+                  Flexible(
+                    child: Text(
+                      content1!,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white, // White text for better contrast
+                      ),
+                    ),
+                  ),
+                if (content2 != null)
+                  Flexible(
+                      child: Text(
+                        content2!,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white, // White text for better contrast
+                        ),
+                      ),
+                  )
               ],
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:olehbali_mobile/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'OlehBali',
         theme: ThemeData(
+          textTheme: GoogleFonts.latoTextTheme(),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.deepOrange,
           ).copyWith(secondary: Colors.deepPurple[100]),
