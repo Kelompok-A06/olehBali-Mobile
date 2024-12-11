@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
-import 'package:olehbali_mobile/widgets/dummycard.dart';
+import 'package:olehbali_mobile/widgets/itemcard.dart';
 import 'package:olehbali_mobile/userprofile/models/profile.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -16,15 +18,50 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final List<ItemHomepage> items = [
-    ItemHomepage("DUMMY", Icons.view_day_outlined, Colors.blueAccent),
-    ItemHomepage("DUMMY", Icons.add, Colors.greenAccent),
-    ItemHomepage("Logout", Icons.logout, Colors.redAccent),
+    ItemHomepage("assets/images/logo_olehBali.png", "Katalog","Discover over 100 products available in Denpasar!"),
+    ItemHomepage("assets/images/logo_olehBali.png", "Wishlist","Easily save various products you like."),
+    ItemHomepage("assets/images/logo_olehBali.png", "Community","Discuss experiences and gain recommendations to find products."),
+    ItemHomepage("assets/images/logo_olehBali.png", "Reviews","See what other people have to say."),
+
   ];
+
+  late PageController _pageController;
+  late Timer _carouselTimer;
+  int _currentIndex = 0;
 
   Future<String> fetchUserName(CookieRequest request) async {
     final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
     final profile = Profile.fromJson(response[0]);
     return profile.fields.name;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.8);
+
+    _startAutoScroll();
+  }
+  void _startAutoScroll() {
+    _carouselTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_currentIndex < items.length - 1) {
+        _currentIndex++;
+      } else {
+        _currentIndex = 0; // Reset to the first item
+      }
+      _pageController.animateToPage(
+        _currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _carouselTimer.cancel();
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -80,52 +117,62 @@ class _MyHomePageState extends State<MyHomePage> {
           } else {
             return Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: ListView(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InfoCard(
-                        title: 'Halo ${snapshot.data}!',
-                        subTitle: 'Find Your Souvenirs',
-                        content: "We give you Bali's best souvenirs in Denpasar.",
-                        content1: 'Discover a wide range of unique and exclusive products.',
-                        content2: 'Go, shopping!',
-                        imageUrl : 'assets/images/purahome.png'
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  Center(
-                    child: Column(
+                  Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 16.0),
-                          child: Text(
-                            'Welcome to OlehBali',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                            ),
-                          ),
-                        ),
-                        GridView.count(
-                          primary: true,
-                          padding: const EdgeInsets.all(20),
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          crossAxisCount: 3,
-                          shrinkWrap: true,
-                          children: items.map((ItemHomepage item) {
-                            return ItemCard(item);
-                          }).toList(),
+                        InfoCard(
+                            title: 'Halo ${snapshot.data}!',
+                            subTitle: 'Find Your Souvenirs',
+                            content: "We give you Bali's best souvenirs in Denpasar.",
+                            content1: 'Discover a wide range of unique and exclusive products.',
+                            content2: 'Go, shopping!',
+                            imageUrl : 'assets/images/purahome.png'
                         ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 16.0),
+                    Center(
+                      child: Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(top: 16.0),
+                            child: Text(
+                              'Welcome to OlehBali',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          SizedBox(
+                            height: 200, // Height of the carousel
+                            child: PageView.builder(
+                              controller: _pageController,
+                              itemCount: items.length,
+                              onPageChanged: (index) {
+                                _currentIndex = index;
+                              },
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: ItemCard(items[index]),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 ],
-              ),
+              )
             );
           }
         }
@@ -151,7 +198,7 @@ class InfoCard extends StatelessWidget {
     this.content1,
     this.content2,
   });
-  // TODO FIX OVERFLOWING TEXT
+
   @override
   Widget build(BuildContext context) {
     return Card(

@@ -136,38 +136,46 @@ class _ReviewPageState extends State<ReviewPage>{
                               ),
                               const SizedBox(height: 12),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Flexible(
-                                    child: Text(
-                                      review.fields.comments,
-                                      style: const TextStyle(
-                                        fontSize: 14.0,
-                                        color: Colors.black54,
-                                      ),
-                                    )
-                                  ),
-                                  Container(
-                                    padding:
-                                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: Colors.amber.shade100,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Row(
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Icon(Icons.star, size: 16, color: Colors.amber),
-                                        const SizedBox(width: 4),
                                         Text(
-                                          "${review.fields.ratings}",
+                                          review.fields.comments,
                                           style: const TextStyle(
                                             fontSize: 14.0,
-                                            color: Colors.amber,
-                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black54,
                                           ),
                                         ),
                                       ],
                                     ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.amber.shade100,
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.star, size: 16, color: Colors.amber),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              "${review.fields.ratings}",
+                                              style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: Colors.amber,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
