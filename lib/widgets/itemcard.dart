@@ -4,8 +4,9 @@ class ItemHomepage {
   final String imagePath;
   final String title;
   final String content;
+  final Widget nextPage;
 
-  ItemHomepage(this.imagePath, this.title, this.content);
+  ItemHomepage(this.imagePath, this.title, this.content, this.nextPage);
 }
 
 class ItemCard extends StatelessWidget {
@@ -23,11 +24,10 @@ class ItemCard extends StatelessWidget {
         elevation: 4,
         child: InkWell(
           onTap: () {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text("Kamu telah menekan tombol ${item.title}!")),
-              );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => item.nextPage),
+            );
           },
           child: Container(
             padding: const EdgeInsets.all(16),
@@ -40,8 +40,8 @@ class ItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
                     item.imagePath,
-                    height: 60,
-                    width: 60,
+                    height: 50,
+                    width: 50,
                     fit: BoxFit.cover,
                   ),
                 ),

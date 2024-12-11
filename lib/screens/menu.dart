@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:olehbali_mobile/widgets/itemcard.dart';
 import 'package:olehbali_mobile/userprofile/models/profile.dart';
@@ -18,10 +19,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final List<ItemHomepage> items = [
-    ItemHomepage("assets/images/logo_olehBali.png", "Katalog","Discover over 100 products available in Denpasar!"),
-    ItemHomepage("assets/images/logo_olehBali.png", "Wishlist","Easily save various products you like."),
-    ItemHomepage("assets/images/logo_olehBali.png", "Community","Discuss experiences and gain recommendations to find products."),
-    ItemHomepage("assets/images/logo_olehBali.png", "Reviews","See what other people have to say."),
+    ItemHomepage("assets/images/logo_olehBali.png", "Katalog","Discover over 100 products available in Denpasar!", const MyHomePage()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Wishlist","Easily save various products you like.", const MyHomePage()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Community","Discuss experiences and gain recommendations to find products.", const MyHomePage()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Reviews","See what other people have to say.", const ReviewPage()),
 
   ];
 
