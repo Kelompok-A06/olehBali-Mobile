@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:olehbali_mobile/screens/menu.dart';
+import 'package:olehbali_mobile/reviews/screens/ProductDetailPage.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +95,7 @@ class _ReviewPageState extends State<ReviewPage>{
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MyHomePage(), // Placeholder navigation
+                              builder: (context) => ProductDetailPage(tempReview: review), // Placeholder navigation
                             ),
                           );
                         },

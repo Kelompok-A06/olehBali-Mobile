@@ -35,6 +35,7 @@ class Reviews {
 class Fields {
   int user;
   int ratings;
+  int productId;
   String comments;
   String username;
   String productName;
@@ -43,6 +44,7 @@ class Fields {
   Fields({
     required this.user,
     required this.ratings,
+    required this.productId,
     required this.comments,
     required this.username,
     required this.productName,
@@ -54,6 +56,7 @@ class Fields {
     comments: json["comments"],
     username: json["username"],
     productName: json["productName"],
+    productId: json["productId"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -62,5 +65,6 @@ class Fields {
     "comments": comments,
     "username": username,
     "productName": productName,
+    "productId" : productId,
   };
 }
