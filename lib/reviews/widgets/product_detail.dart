@@ -42,12 +42,12 @@ class ProductDetail extends StatelessWidget {
                   color: Color.fromARGB(255, 3, 164, 193)
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
                 product.fields.deskripsi,
                 style: const TextStyle(fontSize: 12),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             // Product Category
             const Text(
               "Kategori",
@@ -57,12 +57,12 @@ class ProductDetail extends StatelessWidget {
                   color: Color.fromARGB(255, 254, 150, 66)
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               product.fields.kategori,
               style: const TextStyle(fontSize: 12),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             // Nama Toko
             const Text(
               "Nama Toko",
@@ -72,12 +72,12 @@ class ProductDetail extends StatelessWidget {
                   color: Color.fromARGB(255, 254, 150, 66)
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               product.fields.toko,
               style: const TextStyle(fontSize: 12),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             // Alamat Toko
             const Text(
               "Alamat Toko",
@@ -87,12 +87,12 @@ class ProductDetail extends StatelessWidget {
                   color: Color.fromARGB(255, 254, 150, 66)
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               product.fields.alamat,
               style: const TextStyle(fontSize: 12),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             // Harga
             const Text(
               "Harga",
@@ -102,12 +102,12 @@ class ProductDetail extends StatelessWidget {
                   color: Color.fromARGB(255, 254, 150, 66)
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               "Rp${product.fields.harga}",
               style: const TextStyle(fontSize: 12),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             // Rating
             const Text(
               "Rata-rata rating",
@@ -117,7 +117,7 @@ class ProductDetail extends StatelessWidget {
                   color: Color.fromARGB(255, 254, 150, 66)
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Row(
               children: [
                 const Icon(Icons.star, size: 16, color: Colors.amber),

@@ -50,9 +50,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.productName} Details"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Kembali
+          },
+        ),
         backgroundColor: Colors.white,
       ),
-      drawer: const LeftDrawer(),
       body: FutureBuilder(
         future: fetchCurrentProductReviews(request),
         builder: (context, AsyncSnapshot snapshot) {
