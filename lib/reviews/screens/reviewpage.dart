@@ -91,11 +91,13 @@ class _ReviewPageState extends State<ReviewPage>{
                       var review = snapshot.data![index];
                       return InkWell(
                         onTap: () {
-                          // Example: Navigate to a detailed view or perform some action
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProductDetailPage(tempReview: review), // Placeholder navigation
+                              builder: (context) => ProductDetailPage(
+                                productId: review.fields.productId,
+                                productName: review.fields.productName,
+                              ),
                             ),
                           );
                         },
