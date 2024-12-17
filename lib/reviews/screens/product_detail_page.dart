@@ -4,7 +4,7 @@ import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import '../models/reviews2.dart';
-import '../widgets/ProductDetail.dart';
+import '../widgets/product_detail.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final int productId;
@@ -60,54 +60,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             return const Center(child: CircularProgressIndicator());
           } else {
             if (snapshot.data!.isEmpty) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text(
-                      'Belum ada yang meninggalkan review untuk produk Ini. Jadilah yang pertama untuk menambahkannya!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Color.fromARGB(255, 79, 71, 70),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 245, 245, 245),
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                    child: const Text(
-                      'Ayo beri ulasan pertama!',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 255, 105, 70),
-                      ),
-                    ),
-                  ),
-                ],
+              return Center(
+                child: ProductDetail(
+                  product: product!, // Pass the product object
+                  averageRating: averageRating, // Replace with the actual average rating
+                ),
               );
             } else {
               return SingleChildScrollView(
                 child: Column(
                   children: [
                     ProductDetail(
-                      product: product!, // Pass the product object
-                      averageRating: averageRating, // Replace with the actual average rating
+                      product: product!,
+                      averageRating: averageRating,
                     ),
                     ListView.builder(
                       shrinkWrap: true,  // Allow ListView to take up only as much space as needed

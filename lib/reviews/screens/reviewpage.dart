@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:olehbali_mobile/reviews/screens/ProductDetailPage.dart';
+import 'package:olehbali_mobile/reviews/screens/product_detail_page.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
