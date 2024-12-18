@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/katalog/models/product.dart';
+import 'package:olehbali_mobile/reviews/widgets/review_form.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import '../models/reviews2.dart';
@@ -191,14 +192,45 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       // Edit Button
                                       ElevatedButton(
                                         onPressed: () async {
-                                          // Handle Edit button logic
                                           int reviewId = review.id;
-                                          // Implement the editing logic (e.g., navigate to the edit form or show a dialog)
-                                          // For example:
-                                          // Navigator.push(context, MaterialPageRoute(builder: (context) => EditReviewPage(reviewId: reviewId)));
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) => ReviewForm(
+                                                  onSubmit: (rating, comment) async {
+                                                    int reviewId = review.id;
+                                                    int productId = product!.pk;
+                                                    final response = await request.postJson(
+                                                      "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/add-review-flutter/",
+                                                      jsonEncode(<String, String>{
+                                                        'ratings': '$rating',
+                                                        'id' : '$productId',
+                                                        'comments' : comment,
+                                                        'review_id' : '$reviewId',
+                                                      }),
+                                                    );
+                                                    if (context.mounted) {
+                                                      if (response['status'] == 'updated') {
+                                                        ScaffoldMessenger.of(context)
+                                                            .showSnackBar(const SnackBar(
+                                                          content: Text("Review berhasil diupdate!"),
+                                                        ));
+                                                        update();
+                                                      } else {
+                                                        ScaffoldMessenger.of(context)
+                                                            .showSnackBar(const SnackBar(
+                                                          content:
+                                                          Text("Terdapat kesalahan, silakan coba lagi."),
+                                                        ));
+                                                    }
+                                                  }
+                                                },
+                                                initialRating: review.ratings,
+                                                initialComment: review.comments,
+                                              )
+                                          );
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.blue, // You can customize this color
+                                          backgroundColor: Colors.blue,
                                         ),
                                         child: const Text("Edit", style: TextStyle(color: Colors.white)),
                                       ),

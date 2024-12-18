@@ -40,10 +40,10 @@ class ProductDetail extends StatelessWidget {
               imageUrl.isNotEmpty
                   ? Image.network(imageUrl, width: double.infinity, height: 200, fit: BoxFit.cover)
                   : Container(
-                width: double.infinity,
-                height: 200,
-                color: Colors.grey[300],
-                child: const Center(child: Icon(Icons.image, size: 50, color: Colors.white)),
+                    width: double.infinity,
+                    height: 200,
+                    color: Colors.grey[300],
+                    child: const Center(child: Icon(Icons.image, size: 50, color: Colors.white)),
               ),
               const SizedBox(height: 12),
               // Product Name

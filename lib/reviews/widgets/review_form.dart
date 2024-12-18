@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 
 class ReviewForm extends StatefulWidget {
   final Function(int rating, String comment) onSubmit;
+  final int? initialRating; // Optional: Existing rating
+  final String? initialComment; // Optional: Existing comment
 
-  const ReviewForm({super.key, required this.onSubmit});
+  const ReviewForm({
+    super.key,
+    required this.onSubmit,
+    this.initialRating, // Pass the initial rating
+    this.initialComment, // Pass the initial comment
+  });
 
   @override
   State<StatefulWidget> createState() => _ReviewFormState();
@@ -13,6 +20,18 @@ class _ReviewFormState extends State<ReviewForm> {
   final _formKey = GlobalKey<FormState>();
   int _selectedRating = 0;
   final _commentController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the form fields with existing review values
+    if (widget.initialRating != null) {
+      _selectedRating = widget.initialRating!;
+    }
+    if (widget.initialComment != null) {
+      _commentController.text = widget.initialComment!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
