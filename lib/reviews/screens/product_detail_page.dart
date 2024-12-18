@@ -11,13 +11,13 @@ import '../widgets/product_detail.dart';
 class ProductDetailPage extends StatefulWidget {
   final int productId;
   final String productName;
-  final Function() onUpdate;
+  final Function()? onUpdate;
 
   const ProductDetailPage({
     super.key,
     required this.productId,
     required this.productName,
-    required this.onUpdate,
+    this.onUpdate,
   });
 
   @override
@@ -59,7 +59,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   void update() {
     setState(() {});
-    widget.onUpdate();
+    if (widget.onUpdate != null) {
+      widget.onUpdate!();
+    }
   }
 
   @override
@@ -192,7 +194,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       // Edit Button
                                       ElevatedButton(
                                         onPressed: () async {
-                                          int reviewId = review.id;
                                           showDialog(
                                               context: context,
                                               builder: (context) => ReviewForm(
