@@ -9,7 +9,14 @@ import '../widgets/product_detail.dart';
 class ProductDetailPage extends StatefulWidget {
   final int productId;
   final String productName;
-  const ProductDetailPage({super.key, required this.productId, required this.productName});
+  final Function() onUpdate;
+
+  const ProductDetailPage({
+    super.key,
+    required this.productId,
+    required this.productName,
+    required this.onUpdate,
+  });
 
   @override
   State<StatefulWidget> createState() => _ProductDetailPageState();
@@ -44,6 +51,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return listReview;
   }
 
+  void update() {
+    setState(() {});
+    widget.onUpdate();
+  }
+
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
@@ -67,8 +79,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             if (snapshot.data!.isEmpty) {
               return Center(
                 child: ProductDetail(
-                  product: product!, // Pass the product object
-                  averageRating: averageRating, // Replace with the actual average rating
+                  product: product!,
+                  averageRating: averageRating,
+                  onReviewSubmitted: update,
                 ),
               );
             } else {
@@ -78,6 +91,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ProductDetail(
                       product: product!,
                       averageRating: averageRating,
+                      onReviewSubmitted: update,
                     ),
                     ListView.builder(
                       shrinkWrap: true,  // Allow ListView to take up only as much space as needed

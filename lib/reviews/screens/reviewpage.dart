@@ -27,6 +27,10 @@ class _ReviewPageState extends State<ReviewPage>{
     return listReview;
   }
 
+  void update() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
@@ -97,6 +101,7 @@ class _ReviewPageState extends State<ReviewPage>{
                               builder: (context) => ProductDetailPage(
                                 productId: review.fields.productId,
                                 productName: review.fields.productName,
+                                onUpdate: update,
                               ),
                             ),
                           );

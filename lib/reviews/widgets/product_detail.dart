@@ -1,16 +1,28 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/katalog/models/product.dart';
+import 'package:olehbali_mobile/reviews/widgets/review_form.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetail extends StatelessWidget {
   final Product product;
   final double averageRating;
+  final Function() onReviewSubmitted;
 
-  const ProductDetail({super.key, required this.product, required this.averageRating});
+  const ProductDetail({
+    super.key,
+    required this.product,
+    required this.averageRating,
+    required this.onReviewSubmitted,
+  });
 
   @override
   Widget build(BuildContext context) {
     // Determine the image source (URL or local file path)
     String imageUrl = product.fields.gambar.isNotEmpty ? product.fields.gambar : product.fields.gambarFile;
+    final request = context.watch<CookieRequest>();
 
     return Card(
       elevation: 5,
@@ -131,6 +143,45 @@ class ProductDetail extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 4),
+            ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => ReviewForm(
+                    onSubmit: (rating, comment) async {
+                      // Handle the form submission logic
+                      int productId = product.pk;
+                      final response = await request.postJson(
+                        "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/add-review-flutter/",
+                        jsonEncode(<String, String>{
+                          'ratings': '$rating',
+                          'id' : '$productId',
+                          'comments' : comment,
+                          'review_id' : '',
+                        }),
+                      );
+                      if (context.mounted) {
+                        if (response['status'] == 'success') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Review baru berhasil disimpan!"),
+                          ));
+                          onReviewSubmitted();
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content:
+                            Text("Terdapat kesalahan, silakan coba lagi."),
+                          ));
+                        }
+                      }
+                    },
+                  ),
+                );
+              },
+              child: const Text('Write a Review'),
             ),
           ],
         ),
