@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/katalog/models/product.dart';
-import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import '../models/reviews2.dart';
@@ -32,6 +33,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     // Fetch informasi produk
     final response1 = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-product/$productId');
     var dataProduct = response1;
+    averageRating = 0;
     if (dataProduct[0] != null) {
       product = Product.fromJson(dataProduct[0]);
     }
@@ -47,7 +49,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         averageRating += review.ratings;
       }
     }
-    averageRating /= listReview.length;
+    if (averageRating > 0) {
+      averageRating /= listReview.length;
+    }
+
     return listReview;
   }
 
@@ -78,10 +83,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           } else {
             if (snapshot.data!.isEmpty) {
               return Center(
-                child: ProductDetail(
-                  product: product!,
-                  averageRating: averageRating,
-                  onReviewSubmitted: update,
+                child: Column(
+                  children: [
+                    Flexible(
+                      child: ProductDetail(
+                        product: product!,
+                        averageRating: averageRating,
+                        onReviewSubmitted: update,
+                      ),
+                    ),
+                  ],
                 ),
               );
             } else {
@@ -94,10 +105,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       onReviewSubmitted: update,
                     ),
                     ListView.builder(
-                      shrinkWrap: true,  // Allow ListView to take up only as much space as needed
+                      shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       itemBuilder: (_, index) {
                         var review = snapshot.data![index];
+                        Map<String, dynamic> jsonData = request.getJsonData();
+                        bool isCurrentUser = review.username == jsonData["username"];
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
@@ -169,6 +182,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   ),
                                 ],
                               ),
+                              if (isCurrentUser)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start, // Align buttons to the left
+                                    children: [
+                                      // Edit Button
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          // Handle Edit button logic
+                                          int reviewId = review.id;
+                                          // Implement the editing logic (e.g., navigate to the edit form or show a dialog)
+                                          // For example:
+                                          // Navigator.push(context, MaterialPageRoute(builder: (context) => EditReviewPage(reviewId: reviewId)));
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blue, // You can customize this color
+                                        ),
+                                        child: const Text("Edit", style: TextStyle(color: Colors.white)),
+                                      ),
+                                      const SizedBox(width: 8), // Space between buttons
+                                      // Delete Button
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          int reviewId = review.id;
+                                          final response = await request.postJson(
+                                            "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/delete-flutter/",
+                                            jsonEncode(<String, String>{
+                                              "id": "$reviewId",
+                                            }),
+                                          );
+                                          update(); // Call update to refresh the widget after deletion
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red, // Red color for delete button
+                                        ),
+                                        child: const Text("Delete", style: TextStyle(color: Colors.white)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                             ],
                           ),
                         );
