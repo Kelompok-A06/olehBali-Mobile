@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/community/models/comment.dart';
 import 'package:olehbali_mobile/community/models/post.dart';
-import 'package:olehbali_mobile/community/screens/add_comment.dart';
+//import 'package:olehbali_mobile/community/screens/post_service.dart';
+import 'package:olehbali_mobile/community/screens/add_comment.dart ';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -16,6 +17,7 @@ class SeeDetails extends StatefulWidget {
 
 class _SeeDetailsState extends State<SeeDetails> {
   List<Comment> comments = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -24,17 +26,24 @@ class _SeeDetailsState extends State<SeeDetails> {
   }
 
   Future<void> fetchComments() async {
-    final response = await http.get(
-      Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-flutter/post/${widget.post.pk}/comments/json/'), // Sesuaikan dengan URL Django
-    );
+    setState(() => _isLoading = true);
+    try {
+      final response = await http.get(
+        Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-flutter/post/${widget.post.pk}/comments/json/'),
+      );
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      setState(() {
-        comments = List<Comment>.from(data.map((x) => Comment.fromJson(x)));
-      });
-    } else {
-      throw Exception('Failed to load comments');
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        setState(() {
+          comments = List<Comment>.from(data.map((x) => Comment.fromJson(x)));
+        });
+      } else {
+        throw Exception('Failed to load comments');
+      }
+    } catch (e) {
+      print('Error fetching comments: $e');
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -47,6 +56,9 @@ class _SeeDetailsState extends State<SeeDetails> {
       });
     } catch (e) {
       print('Error creating comment: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to create comment: $e')),
+      );
     }
   }
 
@@ -96,15 +108,17 @@ class _SeeDetailsState extends State<SeeDetails> {
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 16),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: comments.length,
-                        itemBuilder: (context, index) {
-                          final comment = comments[index];
-                          return CommentCard(comment: comment);
-                        },
-                      ),
+                      _isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: comments.length,
+                              itemBuilder: (context, index) {
+                                final comment = comments[index];
+                                return CommentCard(comment: comment);
+                              },
+                            ),
                     ],
                   ),
                 ),

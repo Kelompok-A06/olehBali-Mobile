@@ -3,12 +3,12 @@ import 'package:olehbali_mobile/community/models/post.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
-class AddPost {
+class PostService {
   final String activeUrl;
 
-  AddPost({required this.activeUrl});
+  PostService({required this.activeUrl});
 
-  Future<List<Post>> fetchPost(CookieRequest request) async {
+  Future<List<Post>> fetchPosts(CookieRequest request) async {
     final response = await request.get(activeUrl);
 
     if (response.statusCode == 200) {
@@ -21,18 +21,18 @@ class AddPost {
 
   Future<Post> createPost(String title, String content, int authorId) async {
     final response = await http.post(
-      Uri.parse('$activeUrl/post/create/'), // Sesuaikan dengan URL Django
+      Uri.parse('$activeUrl/create-post-flutter/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
         'title': title,
         'content': content,
-        'author': authorId, // Ganti dengan ID author yang sesuai
+        'author': authorId,
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return Post.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to create post');

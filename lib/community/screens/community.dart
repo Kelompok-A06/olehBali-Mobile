@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/community/models/post.dart';
-import 'package:olehbali_mobile/community/screens/add_post.dart';
 import 'package:olehbali_mobile/community/screens/see_details.dart';
+import 'package:olehbali_mobile/community/screens/post_service.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +12,8 @@ class Community extends StatefulWidget {
 
 class _CommunityState extends State<Community> {
   List<Post> posts = [];
+  bool _isLoading = false;
+  final String baseUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-flutter/';
 
   @override
   void initState() {
@@ -20,15 +22,22 @@ class _CommunityState extends State<Community> {
   }
 
   Future<void> fetchPosts() async {
-    final request = context.read<CookieRequest>();
-    final addPost = AddPost(activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-flutter/');
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+
     try {
-      final fetchedPosts = await addPost.fetchPost(request);
+      final request = context.read<CookieRequest>();
+      final postService = PostService(activeUrl: baseUrl);
+      final fetchedPosts = await postService.fetchPosts(request);
+
       setState(() {
         posts = fetchedPosts;
       });
     } catch (e) {
       print('Error fetching posts: $e');
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -41,12 +50,14 @@ class _CommunityState extends State<Community> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: posts.length,
-              itemBuilder: (context, index) {
-                return PostCard(post: posts[index]);
-              },
-            ),
+            child: _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      return PostCard(post: posts[index]);
+                    },
+                  ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -107,10 +118,13 @@ class _CommunityState extends State<Community> {
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
-                    final request = context.read<CookieRequest>();
-                    final addPost = AddPost(activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-flutter/');
+                    final postService = PostService(activeUrl: baseUrl);
                     try {
-                      final newPost = await addPost.createPost(title, content, 1); // Ganti 1 dengan ID author yang sesuai
+                      final newPost = await postService.createPost(
+                        title: title,
+                        content: content,
+                        authorId: 1, // Ganti dengan ID author yang sesuai
+                      );
                       setState(() {
                         posts.insert(0, newPost);
                       });

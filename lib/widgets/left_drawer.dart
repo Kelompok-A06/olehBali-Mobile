@@ -3,6 +3,7 @@ import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
 import 'package:olehbali_mobile/screens/menu.dart';
 import 'package:olehbali_mobile/userprofile/screens/user_profile.dart';
 import 'package:olehbali_mobile/katalog/screens/katalog_screen.dart';
+import 'package:olehbali_mobile/community/screens/community.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import '../screens/login.dart';
@@ -77,6 +78,17 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const ReviewPage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.group), // Ikon untuk Community
+            title: const Text('Community'), // Nama menu untuk Community
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Community(), // Ganti dengan nama halaman Community Anda
                   ));
             },
           ),
