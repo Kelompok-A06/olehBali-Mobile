@@ -23,8 +23,14 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
     });
 
     try {
+      // final response = await request.post(
+      //   'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/delete-account-flutter/',
+      //   jsonEncode({
+      //     'confirm': true,
+      //   }),
+      // );
       final response = await request.post(
-        'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/delete-account-flutter/',
+        'http://127.0.0.1:8000/userprofile/delete-account-flutter/',
         jsonEncode({
           'confirm': true,
         }),

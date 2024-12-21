@@ -29,40 +29,49 @@ class _MyProfilePageState extends State<MyProfilePage> {
     'role': '',
   };
 
+  late Future<Profile> _profileFuture;
+  final CookieRequest _request = CookieRequest();
+
   @override
   void initState() {
     super.initState();
-    var request = CookieRequest();
-    fetchUserProfile(request); // Panggil API untuk mengambil data awal
+    _profileFuture = _fetchUserProfile();
   }
 
-  Future<Profile> fetchUserProfile(CookieRequest request) async {
+  Future<Profile> _fetchUserProfile() async {
     // Ambil data dari server
     // var url = Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api/profile/');
     Profile profile = Profile(model: "none", pk: 1, fields: Fields(user: 1, name: "Fail", phoneNumber: "Fail", email: "Fail", birthdate: "Fail", avatar: "Fail"));
     try {
-      final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
+      // final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
+      final response = await _request.get('http://127.0.0.1:8000/userprofile/api/profile/');
       print(response);
       profile = Profile.fromJson(response[0]);
-       final roleResponse = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
+      // final roleResponse = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
+      final roleResponse = await _request.get('http://127.0.0.1:8000/userprofile/api/get-role/');
+      
       // Null check for each field before assignment
-       String avatarUrl = profile.fields.avatar ?? '';
-      if (avatarUrl.isNotEmpty && !avatarUrl.startsWith('http')) {
-        avatarUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$avatarUrl';
-      }
+      //  String avatarUrl = profile.fields.avatar ?? '';
+      // if (avatarUrl.isNotEmpty && !avatarUrl.startsWith('http')) {
+      //   avatarUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$avatarUrl';
+      // }
+      // if (avatarUrl.isNotEmpty && !avatarUrl.startsWith('http')) {
+      //   avatarUrl = 'http://127.0.0.1:8000/$avatarUrl';
+      // }
       
     // userProfile["avatar"] = avatarUrl;
+      // setState(() {
       userProfile["name"] = profile.fields.name ?? '';
       userProfile["phone_number"] = profile.fields.phoneNumber ?? '';
       userProfile["email"] = profile.fields.email ?? '';
       userProfile["birthdate"] = profile.fields.birthdate ?? 'YYYY-MM-DD';
       userProfile["role"] = roleResponse['role'] ?? 'user';
-
+      // });
       return profile;
     } catch (e) {
       print(e);
       print(profile);
-      userProfile["avatar"] = profile.fields.avatar ?? '';
+      // userProfile["avatar"] = profile.fields.avatar ?? '';
       userProfile["name"] = profile.fields.name ?? '';
       userProfile["phone_number"] = profile.fields.phoneNumber ?? '';
       userProfile["email"] = profile.fields.email ?? '';
@@ -73,33 +82,51 @@ class _MyProfilePageState extends State<MyProfilePage> {
     }
   }
 
-  void _updateUserProfile(Map<String, dynamic> updatedProfile) {
+  // void _updateUserProfile(Map<String, dynamic> updatedProfile) {
+  //   setState(() {
+  //     userProfile = updatedProfile; // Perbarui data profil
+  //   });
+  // }
+  void _refreshProfile() {
     setState(() {
-      userProfile = updatedProfile; // Perbarui data profil
+      _profileFuture = _fetchUserProfile();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
+    // final request = context.watch<CookieRequest>();
     return Scaffold(
       drawer: const LeftDrawer(),
       appBar: AppBar(
         title: const Text('Account Information'),
       ),
-      body: FutureBuilder(
-        future: fetchUserProfile(request),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
+      body: FutureBuilder<Profile>(
+        future: _profileFuture,
+        builder: (context, AsyncSnapshot<Profile> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else {
+          }
+          
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                   ProfileAvatar(
-                    avatarUrl: userProfile['avatar'] ?? '',
-                  ),
+                  //  ProfileAvatar(
+                  //   avatarUrl: userProfile['avatar'] ?? '',
+                  // ),
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.orange[200],
+                    child: Icon(
+                        Icons.person,
+                        size: 50,
+                        color: Colors.orange[900],
+                    ),
+                ),
                   const SizedBox(height: 16),
                   _buildTextField('Name', userProfile['name']),
                   _buildTextField('Phone Number', userProfile['phone_number']),
@@ -118,10 +145,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         ),
                       );
 
-                      if (updatedProfile != null) {
+                       if (updatedProfile != null) {
                         setState(() {
                           userProfile = updatedProfile;
                         });
+                        _refreshProfile(); // Refresh the profile after update
                       }
                     },
                     onMyWishlist: () {
@@ -140,7 +168,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ),
             );
           }
-        },
       ),
     );
   }

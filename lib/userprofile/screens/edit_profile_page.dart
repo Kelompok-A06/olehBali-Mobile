@@ -92,7 +92,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   try {
     final request = context.read<CookieRequest>();
-    const url = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/update_profile_flutter/';
+    // const url = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/update_profile_flutter/';
+    const url = 'http://127.0.0.1:8000/userprofile/update_profile_flutter/';
 
     final updatedData = <String, dynamic>{};
     // var formData = <String, dynamic>{
@@ -116,21 +117,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
       updatedData['birthdate'] = birthdateController.text;
     }
     
-    if (selectedImageFile != null) {
-        try {
-          print('Reading image file...');
-          List<int> imageBytes = await selectedImageFile!.readAsBytes();
-          print('Image size: ${imageBytes.length} bytes');
-          String base64Image = "data:image/jpeg;base64," + base64Encode(imageBytes);
-          print('Base64 image length: ${base64Image.length}');
-          updatedData['avatar'] = base64Image;
-        } catch (e, stackTrace) {
-          print('Error processing image:');
-          print('Error: $e');
-          print('Stack trace: $stackTrace');
-          throw Exception('Failed to process image file: $e');
-        }
-      }
+    // if (selectedImageFile != null) {
+    //     try {
+    //       print('Reading image file...');
+    //       // Masih salah di sini
+    //       List<int> imageBytes = await selectedImageFile!.readAsBytes();
+    //       print('Image size: ${imageBytes.length} bytes');
+    //       String base64Image = "data:image/jpeg;base64," + base64Encode(imageBytes);
+    //       print('Base64 image length: ${base64Image.length}');
+    //       updatedData['avatar'] = base64Image;
+    //     } catch (e, stackTrace) {
+    //       print('Error processing image:');
+    //       print('Error: $e');
+    //       print('Stack trace: $stackTrace');
+    //       throw Exception('Failed to process image file: $e');
+    //     }
+    //   }
 
     if (updatedData.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -149,7 +151,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     if (response['status'] == 'success') {
       if (mounted) {
-        Navigator.pop(context, response['data']);
+      //   Navigator.pop(context, response['data']);
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text('Profile updated successfully')),
+      //   );
+      // }
+      final updatedProfileData = Map<String, dynamic>.from(widget.currentData);
+        updatedData.forEach((key, value) {
+          updatedProfileData[key] = value;
+        });
+
+        // Pop with the updated data
+        Navigator.pop(context, updatedProfileData);
+        
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profile updated successfully')),
         );
@@ -195,14 +209,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Center(
-                      child: ProfileAvatarEditor(
-                        currentAvatarUrl: widget.currentData['avatar'] ?? '',
-                        onAvatarChanged: (File? file) {
-                          setState(() {
-                            selectedImageFile = file;
-                          });
-                        },
+                    // Center(
+                    //   child: ProfileAvatarEditor(
+                    //     currentAvatarUrl: widget.currentData['avatar'] ?? '',
+                    //     onAvatarChanged: (File? file) {
+                    //       setState(() {
+                    //         selectedImageFile = file;
+                    //       });
+                    //     },
+                    //   ),
+                    // ),
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.orange[200],
+                      child: Icon(
+                          Icons.person,
+                          size: 50,
+                          color: Colors.orange[900],
                       ),
                     ),
                     const SizedBox(height: 16),
