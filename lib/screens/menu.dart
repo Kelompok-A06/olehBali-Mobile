@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/community/screens/community.dart';
+import 'package:olehbali_mobile/katalog/screens/katalog_screen.dart';
 import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:olehbali_mobile/widgets/itemcard.dart';
 import 'package:olehbali_mobile/userprofile/models/profile.dart';
+import 'package:olehbali_mobile/wishlist/screens/WishlistScreen.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,8 +22,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final List<ItemHomepage> items = [
-    ItemHomepage("assets/images/logo_olehBali.png", "Katalog","Discover over 100 products available in Denpasar!", const MyHomePage()),
-    ItemHomepage("assets/images/logo_olehBali.png", "Wishlist","Easily save various products you like.", const MyHomePage()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Katalog","Discover over 100 products available in Denpasar!", const CatalogPage()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Wishlist","Easily save various products you like.", WishlistScreen()),
     ItemHomepage("assets/images/logo_olehBali.png", "Community","Discuss experiences and gain recommendations to find products.", const Community()),
     ItemHomepage("assets/images/logo_olehBali.png", "Reviews","See what other people have to say.", const ReviewPage()),
 
