@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
 import 'package:olehbali_mobile/screens/menu.dart';
 import 'package:olehbali_mobile/userprofile/screens/user_profile.dart';
-import 'package:olehbali_mobile/katalog/screens/katalog_screen.dart';
+import 'package:olehbali_mobile/community/screens/community.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import '../screens/login.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Drawer(
       child: ListView(
         children: [
@@ -48,14 +52,14 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => const MyHomePage(),
                   ));
             },
           ),
           ListTile(
             leading: const Icon(Icons.account_circle),
             title: const Text('My Account'),
-            // Bagian redirection ke MyHomePage
+            // Bagian redirection ke MyProfilePage
             onTap: () {
               Navigator.pushReplacement(
                   context,
@@ -67,13 +71,53 @@ class LeftDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.reviews),
             title: const Text('Lihat apa yang dikatakan orang-orang!'),
-            // Bagian redirection ke MyHomePage
+            // Bagian redirection ke ReviewPage
             onTap: () {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const ReviewPage(),
                   ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.group), // Ikon untuk Community
+            title: const Text('Community'), // Nama menu untuk Community
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Community(), // Ganti dengan nama halaman Community Anda
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: const Text('Logout', style: TextStyle(color: Colors.red)),
+            onTap: () async {
+              // Logout logic
+              final response = await request.logout(
+                "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/logout-flutter/",
+              );
+              String message = response["message"];
+              if (context.mounted) {
+                if (response['status']) {
+                  String uname = response["username"];
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("$message Sampai jumpa, $uname."),
+                  ));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                    ),
+                  );
+                }
+              }
             },
           ),
         ],

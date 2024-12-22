@@ -39,7 +39,7 @@ class ProfileAvatar extends StatelessWidget {
     if (avatarUrl.startsWith('http')) {
       return NetworkImage(avatarUrl);
     } else if (avatarUrl.startsWith('/')) {
-      return NetworkImage('http://127.0.0.1:8000$avatarUrl');
+      return NetworkImage('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$avatarUrl');
     }
     return null;
   }

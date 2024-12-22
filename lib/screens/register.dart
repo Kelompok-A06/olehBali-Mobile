@@ -146,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       String role = _selectedRole!;
                       try {
                         final response = await request.postJson(
-                          "http://127.0.0.1:8000/register-flutter/",
+                          "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/register-flutter/",
                           jsonEncode({
                             "username": username,
                             "password1": password1,

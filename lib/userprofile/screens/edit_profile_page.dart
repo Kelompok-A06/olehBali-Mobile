@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:olehbali_mobile/userprofile/widgets/editable_text_field.dart';
 import 'package:olehbali_mobile/userprofile/widgets/profile_avatar_editor.dart';
+import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
@@ -26,7 +28,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController birthdateController;
   DateTime? selectedDate;
 
-  File? selectedImageFile;
+  // File? selectedImageFile;
   bool isSaving = false;
 
   // void _handleAvatarChanged(String newUrl) {
@@ -92,6 +94,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   try {
     final request = context.read<CookieRequest>();
+    // const url = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/update_profile_flutter/';
     const url = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/update_profile_flutter/';
 
     final updatedData = <String, dynamic>{};
@@ -116,21 +119,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
       updatedData['birthdate'] = birthdateController.text;
     }
     
-    if (selectedImageFile != null) {
-        try {
-          print('Reading image file...');
-          List<int> imageBytes = await selectedImageFile!.readAsBytes();
-          print('Image size: ${imageBytes.length} bytes');
-          String base64Image = "data:image/jpeg;base64," + base64Encode(imageBytes);
-          print('Base64 image length: ${base64Image.length}');
-          updatedData['avatar'] = base64Image;
-        } catch (e, stackTrace) {
-          print('Error processing image:');
-          print('Error: $e');
-          print('Stack trace: $stackTrace');
-          throw Exception('Failed to process image file: $e');
-        }
-      }
+    // if (selectedImageFile != null) {
+    //     try {
+    //       print('Reading image file...');
+    //       // Masih salah di sini
+    //       List<int> imageBytes = await selectedImageFile!.readAsBytes();
+    //       print('Image size: ${imageBytes.length} bytes');
+    //       String base64Image = "data:image/jpeg;base64," + base64Encode(imageBytes);
+    //       print('Base64 image length: ${base64Image.length}');
+    //       updatedData['avatar'] = base64Image;
+    //     } catch (e, stackTrace) {
+    //       print('Error processing image:');
+    //       print('Error: $e');
+    //       print('Stack trace: $stackTrace');
+    //       throw Exception('Failed to process image file: $e');
+    //     }
+    //   }
 
     if (updatedData.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -149,7 +153,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     if (response['status'] == 'success') {
       if (mounted) {
-        Navigator.pop(context, response['data']);
+      //   Navigator.pop(context, response['data']);
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text('Profile updated successfully')),
+      //   );
+      // }
+      final updatedProfileData = Map<String, dynamic>.from(widget.currentData);
+        updatedData.forEach((key, value) {
+          updatedProfileData[key] = value;
+        });
+
+        // Pop with the updated data
+        Navigator.pop(context, updatedProfileData);
+        
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profile updated successfully')),
         );
@@ -172,111 +188,131 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 }
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const LeftDrawer(),
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        backgroundColor: Colors.deepOrange,
+        title: const Text(
+          'Edit Profile',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        elevation: 0,
         actions: [
-          IconButton(
-            onPressed: isSaving ? null : saveChanges,
-            icon: const Icon(Icons.save),
-            tooltip: 'Save Changes',
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              onPressed: isSaving ? null : saveChanges,
+              icon: const Icon(Icons.save_rounded, color: Colors.white),
+              tooltip: 'Save Changes',
+            ),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Center(
-                      child: ProfileAvatarEditor(
-                        currentAvatarUrl: widget.currentData['avatar'] ?? '',
-                        onAvatarChanged: (File? file) {
-                          setState(() {
-                            selectedImageFile = file;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Name field
-                    TextField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Phone field
-                    TextField(
-                      controller: phoneController,
-                      decoration: const InputDecoration(
-                        labelText: 'Phone Number',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.phone),
-                      ),
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(height: 16),
-                    // Email field
-                    TextField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.email),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(height: 16),
-                    // Birthdate field with date picker
-                    GestureDetector(
-                      onTap: () => _selectDate(context),
-                      child: AbsorbPointer(
-                        child: TextField(
-                          controller: birthdateController,
-                          decoration: const InputDecoration(
-                            labelText: 'Birthdate',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.calendar_today),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.orange[50]!,
+              Colors.white,
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.deepOrange!,
+                            width: 2,
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.orange[100],
+                          child: Icon(
+                            Icons.person,
+                            size: 50,
+                            color: Colors.orange[900],
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
+                      const SizedBox(height: 24),
+                      EditableTextField(
+                        controller: nameController,
+                        label: 'Full Name',
+                        prefixIcon: Icons.person_outline_rounded,
+                      ),
+                      EditableTextField(
+                        controller: phoneController,
+                        label: 'Phone Number',
+                        prefixIcon: Icons.phone_outlined,
+                        keyboardType: TextInputType.phone,
+                      ),
+                      EditableTextField(
+                        controller: emailController,
+                        label: 'Email Address',
+                        prefixIcon: Icons.email_outlined,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      EditableTextField(
+                        controller: birthdateController,
+                        label: 'Birth Date',
+                        prefixIcon: Icons.calendar_today_outlined,
+                        readOnly: true,
+                        onTap: () => _selectDate(context),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            // Save button fixed at the bottom
-            ElevatedButton(
-              onPressed: isSaving ? null : saveChanges,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: isSaving
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: isSaving ? null : saveChanges,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Colors.deepOrange,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 2,
+                ),
+                child: isSaving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : const Text(
+                        'Save Changes',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    )
-                  : const Text(
-                      'Save Changes',
-                      style: TextStyle(fontSize: 16),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:olehbali_mobile/screens/menu.dart';
+import 'package:olehbali_mobile/reviews/screens/product_detail_page.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +25,10 @@ class _ReviewPageState extends State<ReviewPage>{
       }
     }
     return listReview;
+  }
+
+  void update() {
+    setState(() {});
   }
 
   @override
@@ -91,11 +95,14 @@ class _ReviewPageState extends State<ReviewPage>{
                       var review = snapshot.data![index];
                       return InkWell(
                         onTap: () {
-                          // Example: Navigate to a detailed view or perform some action
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MyHomePage(), // Placeholder navigation
+                              builder: (context) => ProductDetailPage(
+                                productId: review.fields.productId,
+                                productName: review.fields.productName,
+                                onUpdate: update,
+                              ),
                             ),
                           );
                         },
@@ -136,36 +143,46 @@ class _ReviewPageState extends State<ReviewPage>{
                               ),
                               const SizedBox(height: 12),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    review.fields.comments,
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                  Container(
-                                    padding:
-                                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: Colors.amber.shade100,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Row(
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Icon(Icons.star, size: 16, color: Colors.amber),
-                                        const SizedBox(width: 4),
                                         Text(
-                                          "${review.fields.ratings}",
+                                          review.fields.comments,
                                           style: const TextStyle(
                                             fontSize: 14.0,
-                                            color: Colors.amber,
-                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black54,
                                           ),
                                         ),
                                       ],
                                     ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.amber.shade100,
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.star, size: 16, color: Colors.amber),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              "${review.fields.ratings}",
+                                              style: const TextStyle(
+                                                fontSize: 14.0,
+                                                color: Colors.amber,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),

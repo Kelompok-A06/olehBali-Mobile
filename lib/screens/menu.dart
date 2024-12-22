@@ -1,51 +1,106 @@
-import 'package:flutter/material.dart';
-import 'package:olehbali_mobile/widgets/left_drawer.dart';
-import 'package:olehbali_mobile/widgets/dummycard.dart';
+import 'dart:async';
 
-// INI DIMODIF NANTI
-class MyHomePage extends StatelessWidget {
-  final String npm = 'DUMMY'; // NPM
-  final String name = 'DUMMY'; // Nama
-  final String className = 'DUMMY'; // Kelas
+import 'package:flutter/material.dart';
+import 'package:olehbali_mobile/community/screens/community.dart';
+import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
+import 'package:olehbali_mobile/widgets/left_drawer.dart';
+import 'package:olehbali_mobile/widgets/itemcard.dart';
+import 'package:olehbali_mobile/userprofile/models/profile.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
 
   final List<ItemHomepage> items = [
-    ItemHomepage("DUMMY", Icons.view_day_outlined, Colors.blueAccent),
-    ItemHomepage("DUMMY", Icons.add, Colors.greenAccent),
-    ItemHomepage("Logout", Icons.logout, Colors.redAccent),
+    ItemHomepage("assets/images/logo_olehBali.png", "Katalog","Discover over 100 products available in Denpasar!", const MyHomePage()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Wishlist","Easily save various products you like.", const MyHomePage()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Community","Discuss experiences and gain recommendations to find products.", Community()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Reviews","See what other people have to say.", const ReviewPage()),
+
   ];
 
-  MyHomePage({super.key});
+  late PageController _pageController;
+  late Timer _carouselTimer;
+  int _currentIndex = 0;
+
+  Future<String> fetchUserName(CookieRequest request) async {
+    final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
+    final profile = Profile.fromJson(response[0]);
+    return profile.fields.name;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.8);
+
+    _startAutoScroll();
+  }
+  void _startAutoScroll() {
+    _carouselTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_currentIndex < items.length - 1) {
+        _currentIndex++;
+      } else {
+        _currentIndex = 0; // Reset to the first item
+      }
+      _pageController.animateToPage(
+        _currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _carouselTimer.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
             Image.asset(
-              'assets/images/logo_olehBali.png', // Replace with your actual logo path
+              'assets/images/logo_olehBali.png',
               fit: BoxFit.contain,
               height: 42, // Adjust the height as needed
             ),
             const SizedBox(width: 8), // Spacing between the logo and the text
             RichText(
-              text: const TextSpan(
+              text: TextSpan(
                 children: [
                   TextSpan(
                     text: "Oleh", // First part of the title
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 3, 164, 193), // First color
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
+                    style: GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                        color: Color.fromARGB(255, 3, 164, 193),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    )
                   ),
                   TextSpan(
                     text: "Bali", // Second part of the title
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 254, 150, 66), // Second color
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
+                    style: GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                        color: Color.fromARGB(255, 254, 150, 66),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    )
                   ),
                 ],
               ),
@@ -57,99 +112,171 @@ class MyHomePage extends StatelessWidget {
             const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
       ),
       drawer: const LeftDrawer(),
-      // Body halaman dengan padding di sekelilingnya.
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        // Menyusun widget secara vertikal dalam sebuah kolom.
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Row untuk menampilkan 3 InfoCard secara horizontal.
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InfoCard(title: 'DUMMY', content: npm),
-                InfoCard(title: 'DUMMY', content: name),
-                InfoCard(title: 'DUMMY', content: className),
-              ],
-            ),
-
-            // Memberikan jarak vertikal 16 unit.
-            const SizedBox(height: 16.0),
-
-            // Menempatkan widget berikutnya di tengah halaman.
-            Center(
-              child: Column(
-                // Menyusun teks dan grid item secara vertikal.
-
+      body: FutureBuilder(
+        future: fetchUserName(request),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
+            return const Center(child: CircularProgressIndicator(),);
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
                 children: [
-                  // Menampilkan teks sambutan dengan gaya tebal dan ukuran 18.
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: Text(
-                      'Welcome to OlehBali',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
+                  Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InfoCard(
+                            title: 'Halo ${snapshot.data}!',
+                            subTitle: 'Find Your Souvenirs',
+                            content: "We give you Bali's best souvenirs in Denpasar.",
+                            content1: 'Discover a wide range of unique and exclusive products.',
+                            content2: 'Go, shopping!',
+                            imageUrl : 'assets/images/purahome.png'
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16.0),
+                    Center(
+                      child: Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(top: 16.0),
+                            child: Text(
+                              'Welcome to OlehBali',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          SizedBox(
+                            height: 200, // Height of the carousel
+                            child: PageView.builder(
+                              controller: _pageController,
+                              itemCount: items.length,
+                              onPageChanged: (index) {
+                                _currentIndex = index;
+                              },
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: ItemCard(items[index]),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-
-                  // Grid untuk menampilkan ItemCard dalam bentuk grid 3 kolom.
-                  GridView.count(
-                    primary: true,
-                    padding: const EdgeInsets.all(20),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 3,
-                    // Agar grid menyesuaikan tinggi kontennya.
-                    shrinkWrap: true,
-
-                    // Menampilkan ItemCard untuk setiap item dalam list items.
-                    children: items.map((ItemHomepage item) {
-                      return ItemCard(item);
-                    }).toList(),
-                  ),
+                  ],
+                ),
                 ],
-              ),
-            ),
-          ],
-        ),
+              )
+            );
+          }
+        }
       ),
     );
   }
 }
 
 class InfoCard extends StatelessWidget {
-  // Kartu informasi yang menampilkan title dan content.
+  final String title;
+  final String subTitle;
+  final String content;
+  final String? content1;
+  final String? content2;
+  final String imageUrl;
 
-  final String title; // Judul kartu.
-  final String content; // Isi kartu.
-
-  const InfoCard({super.key, required this.title, required this.content});
+  const InfoCard({
+    super.key,
+    required this.title,
+    required this.content,
+    required this.imageUrl,
+    required this.subTitle,
+    this.content1,
+    this.content2,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      // Membuat kotak kartu dengan bayangan dibawahnya.
       elevation: 2.0,
-      child: Container(
-        // Mengatur ukuran dan jarak di dalam kartu.
-        width: MediaQuery.of(context).size.width /
-            3.5, // menyesuaikan dengan lebar device yang digunakan.
-        padding: const EdgeInsets.all(16.0),
-        color: Colors.amber,
-        // Menyusun title dan content secara vertikal.
-        child: Column(
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+      child: Stack(
+        alignment: Alignment.centerRight,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              imageUrl,
+              width: MediaQuery.of(context).size.width / 1.2,
+              height: 175, // Adjust height as needed
+              fit: BoxFit.cover,
             ),
-            const SizedBox(height: 8.0),
-            Text(content),
-          ],
-        ),
+          ),
+          // Text overlay
+          Positioned(
+            right: 16,
+            width: MediaQuery.of(context).size.width / 1.2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white, // White text for better contrast
+                  ),
+                ),
+                Text(
+                  subTitle,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Colors.white, // White text for better contrast
+                  ),
+                ),
+                Flexible(
+                    child: Text(
+                      content,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.white, // White text for better contrast
+                      ),
+                      textAlign: TextAlign.right,
+                    ),
+                ),
+                if (content1 != null)
+                  Flexible(
+                    child: Text(
+                      content1!,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.white, // White text for better contrast
+                      ),
+                      // textAlign: TextAlign.right,
+                    ),
+                  ),
+                if (content2 != null)
+                  Flexible(
+                      child: Text(
+                        content2!,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.white, // White text for better contrast
+                        ),
+                      ),
+                  )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
