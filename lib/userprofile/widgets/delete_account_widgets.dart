@@ -12,14 +12,31 @@ class DeleteAccountConfirmationCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-      title: const Text(
-        'I understand that this action is permanent and cannot be undone',
-        style: TextStyle(color: Colors.red),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      decoration: BoxDecoration(
+        color: Colors.red.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.red.withOpacity(0.3)),
       ),
-      value: value,
-      onChanged: onChanged,
-      controlAffinity: ListTileControlAffinity.leading,
+      child: CheckboxListTile(
+        title: const Text(
+          'I understand that this action is permanent and cannot be undone',
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+          ),
+        ),
+        value: value,
+        onChanged: onChanged,
+        controlAffinity: ListTileControlAffinity.leading,
+        activeColor: Colors.red,
+        checkColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
     );
   }
 }
@@ -38,22 +55,51 @@ class DeleteAccountButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: isConfirmed && !isLoading ? onPressed : null,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.red,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      width: double.infinity,
+      height: 50,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: ElevatedButton(
+        onPressed: isConfirmed && !isLoading ? onPressed : null,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isConfirmed ? Colors.red : Colors.grey.shade300,
+          foregroundColor: Colors.white,
+          disabledBackgroundColor: Colors.grey.shade200,
+          disabledForegroundColor: Colors.grey.shade400,
+          elevation: isConfirmed ? 2 : 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: isLoading
+              ? const SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.delete_forever, size: 20),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Delete Account',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
       ),
-      child: isLoading
-          ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(color: Colors.white),
-            )
-          : const Text(
-              'Delete Account',
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
     );
   }
 }
@@ -69,19 +115,85 @@ class DeleteAccountConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Final Confirmation'),
-      content: const Text(
-        'Are you absolutely sure you want to delete your account? This action cannot be undone.',
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: Row(
+        children: [
+          Icon(Icons.warning_amber_rounded, 
+               color: Colors.red.shade600, 
+               size: 28),
+          const SizedBox(width: 12),
+          const Text(
+            'Final Confirmation',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Are you absolutely sure you want to delete your account?',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'This action cannot be undone and all your data will be permanently deleted.',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade600,
+            ),
+          ),
+        ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          style: TextButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+          ),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: onConfirm,
-          style: TextButton.styleFrom(foregroundColor: Colors.red),
-          child: const Text('Delete'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+          ),
+          child: const Text(
+            'Delete',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ],
     );

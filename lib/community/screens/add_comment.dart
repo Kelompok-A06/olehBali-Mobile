@@ -1,35 +1,31 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:olehbali_mobile/community/models/comment.dart';
+import 'package:olehbali_mobile/community/screens/post_service.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class AddComment {
   final String activeUrl;
+  final CookieRequest cookieRequest;
 
-  AddComment({required this.activeUrl});
+  AddComment({
+    required this.activeUrl,
+    required this.cookieRequest,
+  });
 
-  /// Membuat komentar baru untuk postingan tertentu.
-  /// [postId] adalah ID postingan yang akan dikomentari.
-  /// [content] adalah isi komentar.
-  /// [authorId] adalah ID pengguna yang membuat komentar.
-  Future<Comment> createComment(int postId, String content, int authorId) async {
+  Future<Comment> createComment(int postId, String content) async {
     try {
-      final response = await http.post(
-        Uri.parse('$activeUrl/create-comment-flutter/'), // Pastikan URL sesuai dengan backend Django
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'post': postId,
+      final response = await cookieRequest.post(
+        '${activeUrl}post/$postId/comments/create/',
+        jsonEncode({
           'content': content,
-          'author': authorId,
         }),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // Parse respons JSON menjadi objek Comment
-        return Comment.fromJson(jsonDecode(response.body));
+      if (response['status'] == true) {
+        return Comment.fromJson(response['data']);
       } else {
-        throw Exception('Failed to create comment: ${response.statusCode}');
+        throw Exception('Failed to create comment: ${response['message']}');
       }
     } catch (e) {
       throw Exception('Network error: $e');
