@@ -5,6 +5,7 @@ import 'package:olehbali_mobile/katalog/models/product.dart';
 import 'package:olehbali_mobile/reviews/widgets/review_form.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:olehbali_mobile/katalog/screens/katalog_screen.dart';
 
 class ProductDetail extends StatelessWidget {
   final Product product;
@@ -61,11 +62,11 @@ class ProductDetail extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Add SingleChildScrollView here
+        child: SingleChildScrollView( 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Image (URL or placeholder if no image)
+              
               buildProductImage(),
               const SizedBox(height: 12),
               // Product Name
@@ -206,10 +207,81 @@ class ProductDetail extends StatelessWidget {
                 },
                 child: const Text('Write a Review'),
               ),
+
+
+              
+              const SizedBox(height: 8),
+
+              // Tombol Wishlist
+              ElevatedButton(
+                onPressed: () async {
+                  int productId = product.pk;
+                  try {
+                    final response = await request.postJson(
+                      "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/wishlist/json/add_wishlist_flutter",
+                      {'product_id': productId.toString()},
+                    );
+
+                    if (response["status"] == "success") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Produk berhasil ditambahkan ke wishlist'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CatalogPage(),
+                        ),
+                      );
+                    } else {
+                      print("Error: ${response['message']}");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(response["message"] ?? 'Terjadi kesalahan'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    print("Request failed: $e");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Terjadi kesalahan saat menambahkan produk ke wishlist'),
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Add to Wishlist'),
+              ),
+
             ],
           ),
         ),
-      ),
+      )
+    );
+  }
+
+  Widget buildSection(String title, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Color.fromARGB(255, 254, 150, 66),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 12),
+        ),
+        const SizedBox(height: 8),
+      ],
     );
   }
 }

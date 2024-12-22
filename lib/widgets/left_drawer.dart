@@ -106,7 +106,7 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.group),
+            leading: const Icon(Icons.shop),
             title: const Text('My Wishlist'), 
             onTap: () {
               Navigator.pushReplacement(
