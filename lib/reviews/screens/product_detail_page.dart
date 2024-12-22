@@ -214,11 +214,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                                     onSubmit: (rating,
                                                         comment) async {
                                                       int reviewId = review.id;
-                                                      int productId =
-                                                          product!.pk;
+                                                      int productId = product!.pk;
                                                       final response =
-                                                          await request
-                                                              .postJson(
+                                                          await request.postJson(
                                                         "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/add-review-flutter/",
                                                         jsonEncode(<String,
                                                             String>{

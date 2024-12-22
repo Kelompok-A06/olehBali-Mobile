@@ -219,7 +219,7 @@ class ProductDetail extends StatelessWidget {
                   try {
                     final response = await request.postJson(
                       "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/wishlist/json/add_wishlist_flutter",
-                      {'product_id': productId.toString()},
+                      jsonEncode(<String, String>{'product_id': productId.toString()}),
                     );
 
                     if (response["status"] == "success") {
