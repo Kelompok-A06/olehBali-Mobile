@@ -1,5 +1,7 @@
 # Kelompok : A06
 
+[![Build status](https://build.appcenter.ms/v0.1/apps/c9bd0a01-db20-40e3-9cd5-6a08837180d7/branches/main/badge)](https://appcenter.ms)
+
 Anggota Kelompok :
 
 - Andharu Hanif Achmadsyah (2306221062)
