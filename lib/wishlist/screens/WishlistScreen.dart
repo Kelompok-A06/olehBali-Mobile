@@ -11,9 +11,11 @@ import 'package:olehbali_mobile/katalog/screens/katalog_screen.dart';
 
 
 class WishlistScreen extends StatefulWidget {
+  const WishlistScreen({super.key});
+
 
   @override
-  _WishlistScreenState createState() => _WishlistScreenState();
+  State<StatefulWidget> createState() => _WishlistScreenState();
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
@@ -131,7 +133,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                       MediaQuery.of(context).size.width > 600 ? 3 : 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.7,
+                  childAspectRatio: 0.5,
                 ),
                 itemCount: snapshot.data!.wishlistItems.length,
                 itemBuilder: (context, index) {

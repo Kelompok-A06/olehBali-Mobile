@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:olehbali_mobile/widgets/left_drawer.dart';
-import 'package:olehbali_mobile/wishlist/models/wishlist.dart';
-import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:olehbali_mobile/wishlist/models/wishlist.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -10,14 +7,16 @@ class WishlistItemWidget extends StatelessWidget {
   final VoidCallback onDelete;
 
   const WishlistItemWidget({
-    Key? key,
+    super.key,
     required this.wishlistItem,
     required this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      semanticContainer: true,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
       ),
@@ -31,7 +30,7 @@ class WishlistItemWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: CachedNetworkImage(
                 imageUrl: wishlistItem.gambar,
-                height: 150,
+                height: MediaQuery.of(context).size.height / 5.4,
                 width: double.infinity,
                 fit: BoxFit.cover,
                 placeholder: (context, url) =>
@@ -45,7 +44,7 @@ class WishlistItemWidget extends StatelessWidget {
             Text(
               wishlistItem.nama,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -55,7 +54,7 @@ class WishlistItemWidget extends StatelessWidget {
             Text(
               wishlistItem.toko,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 color: Colors.grey[600],
               ),
             ),
@@ -64,7 +63,7 @@ class WishlistItemWidget extends StatelessWidget {
             Text(
               'Rp ${wishlistItem.harga}',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 color: Colors.black87,
                 fontWeight: FontWeight.w600,
               ),
@@ -73,14 +72,14 @@ class WishlistItemWidget extends StatelessWidget {
             // Tombol Hapus
             ElevatedButton(
               onPressed: onDelete,
-              child: Text('Delete'),
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white, backgroundColor: Colors.orange,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
+              child: Text('Delete'),
             ),
           ],
         ),
