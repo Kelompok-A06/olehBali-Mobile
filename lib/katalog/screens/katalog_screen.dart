@@ -498,8 +498,6 @@ class _CatalogPageState extends State<CatalogPage> {
                   )
                 else
                   const SizedBox(width: 48),
-
-                // See detail button
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
@@ -508,7 +506,17 @@ class _CatalogPageState extends State<CatalogPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailPage(
+                          productId: product.pk,
+                          productName: product.fields.nama,
+                        ),
+                      ),
+                    );
+                  },
                   child: Text('See Detail', style: GoogleFonts.lato()),
                 ),
               ],
