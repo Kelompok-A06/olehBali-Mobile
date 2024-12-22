@@ -36,17 +36,20 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   Future<Profile> fetchUserProfile(CookieRequest request) async {
     // Ambil data dari server
-    // var url = Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api/profile/');
+    //var url = Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api/profile/');
     Profile profile = Profile(model: "none", pk: 1, fields: Fields(user: 1, name: "Fail", phoneNumber: "Fail", email: "Fail", birthdate: "Fail", avatar: "Fail"));
     try {
       final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
+      //final response = await request.get('http://127.0.0.1:8000/userprofile/api/profile/');
       print(response);
       profile = Profile.fromJson(response[0]);
        final roleResponse = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
+       //final roleResponse = await request.get('http://127.0.0.1:8000/userprofile/api/get-role/');
       // Null check for each field before assignment
        String avatarUrl = profile.fields.avatar ?? '';
       if (avatarUrl.isNotEmpty && !avatarUrl.startsWith('http')) {
         avatarUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$avatarUrl';
+        //avatarUrl = 'http://127.0.0.1:8000/$avatarUrl';
       }
       
     // userProfile["avatar"] = avatarUrl;
