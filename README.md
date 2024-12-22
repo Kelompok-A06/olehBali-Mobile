@@ -94,4 +94,6 @@ Pengguna dapat mencari produk yang ingin mereka cari, melihat profil toko maupun
 
 https://docs.google.com/spreadsheets/d/1N8S_MYg_wuZxCq1zvXGhb4QvITe9sBTcb45nuWGa2DE/edit?gid=1728856645#gid=1728856645
 
-## Tautan deployment aplikasi
+## Tautan Release Aplikasi Microsoft App Center
+
+https://install.appcenter.ms/orgs/kelompoka06/apps/olehbali/distribution_groups/public/releases/5
