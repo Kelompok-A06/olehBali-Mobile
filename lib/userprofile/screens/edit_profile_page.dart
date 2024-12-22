@@ -1,9 +1,6 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:olehbali_mobile/userprofile/widgets/editable_text_field.dart';
-import 'package:olehbali_mobile/userprofile/widgets/profile_avatar_editor.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -239,7 +236,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.deepOrange!,
+                            color: Colors.deepOrange,
                             width: 2,
                           ),
                         ),

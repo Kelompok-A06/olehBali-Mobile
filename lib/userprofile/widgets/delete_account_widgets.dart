@@ -83,12 +83,12 @@ class DeleteAccountButton extends StatelessWidget {
                     strokeWidth: 2,
                   ),
                 )
-              : Row(
+              : const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.delete_forever, size: 20),
-                    const SizedBox(width: 8),
-                    const Text(
+                    Icon(Icons.delete_forever, size: 20),
+                    SizedBox(width: 8),
+                    Text(
                       'Delete Account',
                       style: TextStyle(
                         fontSize: 16,

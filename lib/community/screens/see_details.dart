@@ -8,7 +8,7 @@ import 'package:olehbali_mobile/community/screens/post_service.dart';
 class SeeDetails extends StatefulWidget {
   final Post post;
 
-  SeeDetails({required this.post});
+  const SeeDetails({super.key, required this.post});
 
   @override
   _SeeDetailsState createState() => _SeeDetailsState();
@@ -60,25 +60,21 @@ class _SeeDetailsState extends State<SeeDetails> {
         content: content,
       );
       
-      if (response != null) {
-        setState(() {
-          comments.insert(0, Comment(
-            id: response.id,
-            content: response.content,
-            author: response.author,
-            createdAt: response.createdAt,
-            isAuthor: true,
-          ));
-          _commentController.clear();
-        });
-        
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Comment added successfully!')),
-        );
-      } else {
-        throw Exception('Failed to create comment: Invalid response');
-      }
-    } catch (e) {
+      setState(() {
+        comments.insert(0, Comment(
+          id: response.id,
+          content: response.content,
+          author: response.author,
+          createdAt: response.createdAt,
+          isAuthor: true,
+        ));
+        _commentController.clear();
+      });
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Comment added successfully!')),
+      );
+        } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to create comment: $e')),
       );
@@ -96,7 +92,7 @@ class _SeeDetailsState extends State<SeeDetails> {
           comments.removeWhere((comment) => comment.id == commentId);
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Comment deleted successfully')),
+          const SnackBar(content: Text('Comment deleted successfully')),
         );
       }
     } catch (e) {
@@ -110,17 +106,17 @@ class _SeeDetailsState extends State<SeeDetails> {
 
   Widget buildCommentInput() {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       color: Colors.white,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          minimumSize: Size(double.infinity, 45),
+          minimumSize: const Size(double.infinity, 45),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
         onPressed: () => _showCommentModal(context),
-        child: Text('Add Comment'),
+        child: const Text('Add Comment'),
       ),
     );
   }
@@ -129,7 +125,7 @@ class _SeeDetailsState extends State<SeeDetails> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
@@ -139,7 +135,7 @@ class _SeeDetailsState extends State<SeeDetails> {
           maxChildSize: 0.95,
           builder: (_, controller) {
             return Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
@@ -156,35 +152,35 @@ class _SeeDetailsState extends State<SeeDetails> {
                     child: Container(
                       width: 40,
                       height: 4,
-                      margin: EdgeInsets.only(bottom: 16),
+                      margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Add a Comment',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   TextField(
                     controller: _commentController,
                     maxLines: 5,
                     decoration: InputDecoration(
                       labelText: 'Write your comment',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                       enabled: !_isSubmitting,
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _isSubmitting
                         ? null
                         : () {
                             if (_commentController.text.trim().isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Comment cannot be empty')),
+                                const SnackBar(content: Text('Comment cannot be empty')),
                               );
                               return;
                             }
@@ -192,12 +188,12 @@ class _SeeDetailsState extends State<SeeDetails> {
                             Navigator.pop(context);
                           },
                     child: _isSubmitting
-                        ? SizedBox(
+                        ? const SizedBox(
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : Text('Post Comment'),
+                        : const Text('Post Comment'),
                   ),
                 ],
               ),
@@ -210,7 +206,7 @@ class _SeeDetailsState extends State<SeeDetails> {
 
   Widget buildCommentCard(Comment comment) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -223,15 +219,15 @@ class _SeeDetailsState extends State<SeeDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${comment.author}',
-                      style: TextStyle(
+                      comment.author,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
                     Text(
                       comment.createdAt,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 14,
                       ),
@@ -240,15 +236,15 @@ class _SeeDetailsState extends State<SeeDetails> {
                 ),
                 if (comment.isAuthor)
                   IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red, size: 20),
+                    icon: const Icon(Icons.delete, color: Colors.red, size: 20),
                     onPressed: () => showDeleteDialog(comment),
                   ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               comment.content,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),
@@ -260,15 +256,15 @@ class _SeeDetailsState extends State<SeeDetails> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Comment'),
-        content: Text('Are you sure you want to delete this comment?'),
+        title: const Text('Delete Comment'),
+        content: const Text('Are you sure you want to delete this comment?'),
         actions: [
           TextButton(
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: Text('Delete'),
+            child: const Text('Delete'),
             onPressed: () {
               Navigator.pop(context);
               deleteComment(comment.id);
@@ -283,7 +279,7 @@ class _SeeDetailsState extends State<SeeDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Post Detail'),
+        title: const Text('Post Detail'),
       ),
       body: Column(
         children: [
@@ -310,27 +306,27 @@ class _SeeDetailsState extends State<SeeDetails> {
                                 color: Colors.lightBlue[200],
                               ),
                             ),
-                            SizedBox(width: 12),
+                            const SizedBox(width: 12),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     widget.post.title,
-                                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         '${widget.post.author} • ${widget.post.createdAt}',
-                                        style: TextStyle(color: Colors.grey),
+                                        style: const TextStyle(color: Colors.grey),
                                       ),
                                       if (widget.post.isAuthor)
                                         ElevatedButton.icon(
-                                          icon: Icon(Icons.delete, color: Colors.white),
-                                          label: Text('Delete Post', style: TextStyle(color: Colors.white)),
+                                          icon: const Icon(Icons.delete, color: Colors.white),
+                                          label: const Text('Delete Post', style: TextStyle(color: Colors.white)),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.red,
                                           ),
@@ -343,18 +339,18 @@ class _SeeDetailsState extends State<SeeDetails> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           widget.post.content,
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
                   ),
                   
                   // Comments Section
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: Text(
                       'Comments',
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -362,20 +358,20 @@ class _SeeDetailsState extends State<SeeDetails> {
                   ),
                   
                   if (_isLoading)
-                    Center(child: CircularProgressIndicator())
+                    const Center(child: CircularProgressIndicator())
                   else if (comments.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
                       child: Text(
                         'No comments yet. Be the first to comment!',
                         style: TextStyle(color: Colors.grey),
                       ),
                     )
                   else
-                    ...comments.map(buildCommentCard).toList(),
+                    ...comments.map(buildCommentCard),
                   
                   // Bottom padding for last comment
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -390,21 +386,21 @@ class _SeeDetailsState extends State<SeeDetails> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Post'),
-        content: Text('Are you sure you want to delete this post?'),
+        title: const Text('Delete Post'),
+        content: const Text('Are you sure you want to delete this post?'),
         actions: [
           TextButton(
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: Text('Delete'),
+            child: const Text('Delete'),
             onPressed: () async {
               Navigator.pop(context);
               final success = await _postService.deletePost(widget.post.id);
               if (success) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Post deleted successfully')),
+                  const SnackBar(content: Text('Post deleted successfully')),
                 );
                 Navigator.pop(context); // Return to posts list
               }
