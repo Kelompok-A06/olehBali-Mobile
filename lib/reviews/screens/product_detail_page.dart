@@ -238,21 +238,65 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       const SizedBox(width: 8), // Space between buttons
                                       // Delete Button
                                       ElevatedButton(
-                                        onPressed: () async {
-                                          int reviewId = review.id;
-                                          final response = await request.postJson(
-                                            "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/delete-flutter/",
-                                            jsonEncode(<String, String>{
-                                              "id": "$reviewId",
-                                            }),
-                                          );
-                                          update(); // Call update to refresh the widget after deletion
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text("Confirm"),
+                                                content: const Text("Are you sure you want to delete this review?"),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop(false); // Close dialog with "Cancel"
+                                                    },
+                                                    child: const Text("Cancel"),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      Navigator.of(context).pop(true); // Close dialog with "OK"
+                                                    },
+                                                    child: const Text(
+                                                      "OK",
+                                                      style: TextStyle(color: Colors.red),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ).then((confirmed) async {
+                                            if (confirmed == true) {
+                                              int reviewId = review.id;
+                                              final response = await request.postJson(
+                                                "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/delete-flutter/",
+                                                jsonEncode(<String, String>{
+                                                  "id": "$reviewId",
+                                                }),
+                                              );
+                                              if (context.mounted) {
+                                                if (response['status'] == 'DELETED') {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text("Review berhasil didelete!"),
+                                                    ),
+                                                  );
+                                                  update();
+                                                } else {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text("Terdapat kesalahan, silakan coba lagi."),
+                                                    ),
+                                                  );
+                                                }
+                                              }
+                                            }
+                                          });
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.red, // Red color for delete button
                                         ),
                                         child: const Text("Delete", style: TextStyle(color: Colors.white)),
-                                      ),
+                                      )
                                     ],
                                   ),
                                 ),
