@@ -7,6 +7,8 @@ import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../reviews/screens/product_detail_page.dart';
+
 class ProductService {
   static const String apiUrl = 'http://127.0.0.1:8000/api';
   static const String catalogUrl = 'http://127.0.0.1:8000/catalog';

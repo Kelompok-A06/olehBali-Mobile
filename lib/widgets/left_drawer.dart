@@ -5,6 +5,7 @@ import 'package:olehbali_mobile/userprofile/screens/user_profile.dart';
 import 'package:olehbali_mobile/community/screens/community.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import '../katalog/screens/katalog_screen.dart';
 import '../screens/login.dart';
 
 class LeftDrawer extends StatelessWidget {
@@ -57,6 +58,18 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.list),
+            title: const Text('Katalog'),
+            // Bagian redirection ke Katalog
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CatalogPage(),
+                  ));
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.account_circle),
             title: const Text('My Account'),
             // Bagian redirection ke MyProfilePage
@@ -64,7 +77,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CatalogPage(),
+                    builder: (context) => const MyProfilePage(),
                   ));
             },
           ),
