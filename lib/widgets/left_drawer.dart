@@ -6,6 +6,7 @@ import 'package:olehbali_mobile/community/screens/community.dart';
 import 'package:olehbali_mobile/wishlist/screens/WishlistScreen.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import '../katalog/screens/katalog_screen.dart';
 import '../screens/login.dart';
 
 class LeftDrawer extends StatelessWidget {
@@ -54,6 +55,18 @@ class LeftDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const MyHomePage(),
+                  ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.list),
+            title: const Text('Katalog'),
+            // Bagian redirection ke Katalog
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CatalogPage(),
                   ));
             },
           ),
