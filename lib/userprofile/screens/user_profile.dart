@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/userprofile/screens/delete_account_page.dart';
 import 'package:olehbali_mobile/userprofile/screens/edit_profile_page.dart';
+import 'package:olehbali_mobile/userprofile/widgets/profile_avatar.dart';
 import 'package:olehbali_mobile/userprofile/widgets/profile_buttons.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+
 import '../models/profile.dart';
 
 class MyProfilePage extends StatefulWidget {
@@ -14,7 +17,9 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
+  // Data pengguna sebagai variabel biasa
   Map<String, dynamic> userProfile = {
+    'avatar': '',
     'name': '',
     'phone_number': '',
     'email': '',
@@ -22,166 +27,97 @@ class _MyProfilePageState extends State<MyProfilePage> {
     'role': '',
   };
 
-  late Future<Profile> _profileFuture;
-  final CookieRequest _request = CookieRequest();
-
   @override
   void initState() {
     super.initState();
-    _profileFuture = _fetchUserProfile();
+    var request = CookieRequest();
+    fetchUserProfile(request); // Panggil API untuk mengambil data awal
   }
 
-<<<<<<< HEAD
-  Future<Profile> _fetchUserProfile() async {
-    Profile profile = Profile(
-      model: "none", 
-      pk: 1, 
-      fields: Fields(
-        user: 1, 
-        name: "Fail", 
-        phoneNumber: "Fail", 
-        email: "Fail", 
-        birthdate: "Fail", 
-        avatar: "Fail"
-      )
-    );
-    
-    try {
-      final response = await _request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
-      profile = Profile.fromJson(response[0]);
-      final roleResponse = await _request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
-=======
   Future<Profile> fetchUserProfile(CookieRequest request) async {
     // Ambil data dari server
     //var url = Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api/profile/');
-    Profile profile = Profile(model: "none", pk: 1, fields: Fields(user: 1, name: "Fail", phoneNumber: "Fail", email: "Fail", birthdate: "Fail", avatar: "Fail"));
+    Profile profile = Profile(
+        model: "none",
+        pk: 1,
+        fields: Fields(
+            user: 1,
+            name: "Fail",
+            phoneNumber: "Fail",
+            email: "Fail",
+            birthdate: "Fail",
+            avatar: "Fail"));
     try {
-      final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
+      final response = await request.get(
+          'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
       //final response = await request.get('http://127.0.0.1:8000/userprofile/api/profile/');
       print(response);
       profile = Profile.fromJson(response[0]);
-       final roleResponse = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
-       //final roleResponse = await request.get('http://127.0.0.1:8000/userprofile/api/get-role/');
+      final roleResponse = await request.get(
+          'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
+      //final roleResponse = await request.get('http://127.0.0.1:8000/userprofile/api/get-role/');
       // Null check for each field before assignment
-       String avatarUrl = profile.fields.avatar ?? '';
+      String avatarUrl = profile.fields.avatar ?? '';
       if (avatarUrl.isNotEmpty && !avatarUrl.startsWith('http')) {
-        avatarUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$avatarUrl';
+        avatarUrl =
+            'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$avatarUrl';
         //avatarUrl = 'http://127.0.0.1:8000/$avatarUrl';
       }
->>>>>>> 0fe56a1e0c1686a9c3fcaf7035a8fc6093e29808
-      
+
+      // userProfile["avatar"] = avatarUrl;
       userProfile["name"] = profile.fields.name ?? '';
       userProfile["phone_number"] = profile.fields.phoneNumber ?? '';
       userProfile["email"] = profile.fields.email ?? '';
       userProfile["birthdate"] = profile.fields.birthdate ?? 'YYYY-MM-DD';
       userProfile["role"] = roleResponse['role'] ?? 'user';
-      
+
       return profile;
     } catch (e) {
       print(e);
+      print(profile);
+      userProfile["avatar"] = profile.fields.avatar ?? '';
       userProfile["name"] = profile.fields.name ?? '';
       userProfile["phone_number"] = profile.fields.phoneNumber ?? '';
       userProfile["email"] = profile.fields.email ?? '';
       userProfile["birthdate"] = profile.fields.birthdate ?? 'YYYY-MM-DD';
       userProfile["role"] = 'user';
+      print(userProfile);
       return profile;
     }
   }
 
-  void _refreshProfile() {
+  void _updateUserProfile(Map<String, dynamic> updatedProfile) {
     setState(() {
-      _profileFuture = _fetchUserProfile();
+      userProfile = updatedProfile; // Perbarui data profil
     });
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    drawer: const LeftDrawer(),
-    appBar: AppBar(
-      backgroundColor: Colors.deepOrange,
-      title: const Text(
-        'Account Information',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
+  @override
+  Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+    return Scaffold(
+      drawer: const LeftDrawer(),
+      appBar: AppBar(
+        title: const Text('Account Information'),
       ),
-      elevation: 0,
-    ),
-    body: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.orange[50]!,
-            Colors.white,
-          ],
-        ),
-      ),
-      child: FutureBuilder<Profile>(
-        future: _profileFuture,
-        builder: (context, AsyncSnapshot<Profile> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: FutureBuilder(
+        future: fetchUserProfile(request),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
             return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          return SingleChildScrollView(
-            child: Padding(
+          } else {
+            return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.deepOrange,
-                            width: 2,
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.orange[100],
-                          child: Icon(
-                            Icons.person,
-                            size: 50,
-                            color: Colors.orange[900],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      _buildProfileField(
-                        'Full Name',
-                        userProfile['name'],
-                        Icons.person_outline_rounded,
-                      ),
-                      _buildProfileField(
-                        'Phone Number',
-                        userProfile['phone_number'],
-                        Icons.phone_outlined,
-                      ),
-                      _buildProfileField(
-                        'Email Address',
-                        userProfile['email'],
-                        Icons.email_outlined,
-                      ),
-                      _buildProfileField(
-                        'Birth Date',
-                        userProfile['birthdate'],
-                        Icons.calendar_today_outlined,
-                      ),
-                    ],
+                  ProfileAvatar(
+                    avatarUrl: userProfile['avatar'] ?? '',
                   ),
+                  const SizedBox(height: 16),
+                  _buildTextField('Name', userProfile['name']),
+                  _buildTextField('Phone Number', userProfile['phone_number']),
+                  _buildTextField('Email', userProfile['email']),
+                  _buildTextField('Birthdate', userProfile['birthdate']),
                   const SizedBox(height: 32),
                   ProfileButtons(
                     role: userProfile['role'],
@@ -199,7 +135,6 @@ Widget build(BuildContext context) {
                         setState(() {
                           userProfile = updatedProfile;
                         });
-                        _refreshProfile(); 
                       }
                     },
                     onMyWishlist: () {
@@ -216,57 +151,22 @@ Widget build(BuildContext context) {
                   ),
                 ],
               ),
-            ),
-          );
+            );
+          }
         },
       ),
-    ),
-  );
-}
+    );
+  }
 
-  Widget _buildProfileField(String label, String value, IconData icon) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+  Widget _buildTextField(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: TextFormField(
         initialValue: value,
         readOnly: true,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Colors.black87,
-        ),
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon: Icon(
-            icon,
-            color: Colors.orange[300],
-            size: 22,
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
-              color: Colors.orange[200]!,
-              width: 1.5,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
-              color: Colors.orange[200]!,
-              width: 1.5,
-            ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-          labelStyle: TextStyle(
-            color: Colors.grey[800],
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-          ),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
