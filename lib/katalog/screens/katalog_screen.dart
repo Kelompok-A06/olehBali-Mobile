@@ -10,10 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../reviews/screens/product_detail_page.dart';
 
 class ProductService {
-  static const String apiUrl =
-      'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api';
-  static const String catalogUrl =
-      'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/catalog';
+  static const String apiUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api';
+  static const String catalogUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/catalog';
 
   static String? currentUserRole;
   static String? currentUsername;
@@ -146,8 +144,8 @@ class _CatalogPageState extends State<CatalogPage> {
           Padding(
             padding: EdgeInsets.all(8.0),
             child: CircleAvatar(
-                // backgroundImage: NetworkImage('https://example.com/your-avatar-url'),
-                ),
+              // backgroundImage: NetworkImage('https://example.com/your-avatar-url'),
+            ),
           ),
         ],
       ),
@@ -157,7 +155,7 @@ class _CatalogPageState extends State<CatalogPage> {
             width: double.infinity,
             color: const Color(0xFF00BDD6),
             padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
             child: Center(
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 800),
@@ -221,26 +219,26 @@ class _CatalogPageState extends State<CatalogPage> {
                   if (ProductService.currentUserRole == 'owner')
                     _buildCategoryButton("Add Product", Icons.add_circle,
                         const Color.fromARGB(255, 0, 0, 0), () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddProductForm(
-                            onProductAdded: () {
-                              setState(() {
-                                productsFuture =
-                                    ProductService().fetchProducts();
-                              });
-                            },
-                          ),
-                        ),
-                      );
-                    }),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddProductForm(
+                                onProductAdded: () {
+                                  setState(() {
+                                    productsFuture =
+                                        ProductService().fetchProducts();
+                                  });
+                                },
+                              ),
+                            ),
+                          );
+                        }),
                   _buildCategoryButton("All", Icons.view_list, Colors.black,
-                      () {
-                    setState(() {
-                      productsFuture = ProductService().fetchProducts();
-                    });
-                  }),
+                          () {
+                        setState(() {
+                          productsFuture = ProductService().fetchProducts();
+                        });
+                      }),
                   _buildCategoryButton(
                       "Makanan/Minuman", Icons.fastfood_sharp, Colors.red, () {
                     setState(() {
@@ -257,12 +255,12 @@ class _CatalogPageState extends State<CatalogPage> {
                   }),
                   _buildCategoryButton(
                       "Kerajinan", Icons.card_giftcard_sharp, Colors.orange,
-                      () {
-                    setState(() {
-                      productsFuture = ProductService()
-                          .fetchProductsByCategory("kerajinan_tangan");
-                    });
-                  }),
+                          () {
+                        setState(() {
+                          productsFuture = ProductService()
+                              .fetchProductsByCategory("kerajinan_tangan");
+                        });
+                      }),
                   _buildCategoryButton(
                       "Lain-lain", Icons.more_horiz, Colors.teal, () {
                     setState(() {
@@ -277,37 +275,32 @@ class _CatalogPageState extends State<CatalogPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height - 200,
-                  child: FutureBuilder<List<Product>>(
-                    future: productsFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (snapshot.hasData) {
-                        return GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200,
-                            childAspectRatio: 2 / 3,
-                            crossAxisSpacing: 8,
-                            mainAxisSpacing: 8,
-                          ),
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final product = snapshot.data![index];
-                            return _buildProductCard(product);
-                          },
-                        );
-                      } else {
-                        return const Center(child: Text('No products found'));
-                      }
-                    },
-                  ),
-                ),
+              child: FutureBuilder<List<Product>>(
+                future: productsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    return GridView.builder(
+                      gridDelegate:
+                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 200,
+                        childAspectRatio: 2 / 3,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
+                      ),
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final product = snapshot.data![index];
+                        return _buildProductCard(product);
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text('No products found'));
+                  }
+                },
               ),
             ),
           ),
@@ -413,14 +406,14 @@ class _CatalogPageState extends State<CatalogPage> {
         children: [
           ClipRRect(
             borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(8.0)),
+            const BorderRadius.vertical(top: Radius.circular(8.0)),
             child: buildProductImage(),
           ),
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+              const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
               child: Text(
                 product.fields.nama,
                 style: GoogleFonts.lato(fontWeight: FontWeight.bold),
@@ -477,7 +470,7 @@ class _CatalogPageState extends State<CatalogPage> {
                       if (confirm == true) {
                         try {
                           bool success =
-                              await ProductService().deleteProduct(product.pk);
+                          await ProductService().deleteProduct(product.pk);
                           if (success) {
                             setState(() {
                               productsFuture = ProductService().fetchProducts();
