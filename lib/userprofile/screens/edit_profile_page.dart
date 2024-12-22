@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:olehbali_mobile/userprofile/screens/user_profile.dart';
 import 'package:olehbali_mobile/userprofile/widgets/profile_avatar_editor.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -85,43 +86,44 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> saveChanges() async {
-  setState(() {
-    isSaving = true;
-  });
+    setState(() {
+      isSaving = true;
+    });
 
-  try {
-    final request = context.read<CookieRequest>();
-    const url = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/update_profile_flutter/';
-    //const url = 'http://127.0.0.1:8000/userprofile/update_profile_flutter/';
+    try {
+      final request = context.read<CookieRequest>();
+      const url =
+          'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/update_profile_flutter/';
+      //const url = 'http://127.0.0.1:8000/userprofile/update_profile_flutter/';
 
-    final updatedData = <String, dynamic>{};
-    // var formData = <String, dynamic>{
-    //     'name': nameController.text,
-    //     'phone_number': phoneController.text,
-    //     'email': emailController.text,
-    //     'birthdate': birthdateController.text,
-    //   };
+      final updatedData = <String, dynamic>{};
+      // var formData = <String, dynamic>{
+      //     'name': nameController.text,
+      //     'phone_number': phoneController.text,
+      //     'email': emailController.text,
+      //     'birthdate': birthdateController.text,
+      //   };
 
+      if (nameController.text != widget.currentData['name']) {
+        updatedData['name'] = nameController.text;
+      }
+      if (phoneController.text != widget.currentData['phone_number']) {
+        updatedData['phone_number'] = phoneController.text;
+      }
+      if (emailController.text != widget.currentData['email']) {
+        updatedData['email'] = emailController.text;
+      }
+      if (birthdateController.text != widget.currentData['birthdate']) {
+        updatedData['birthdate'] = birthdateController.text;
+      }
 
-    if (nameController.text != widget.currentData['name']) {
-      updatedData['name'] = nameController.text;
-    }
-    if (phoneController.text != widget.currentData['phone_number']) {
-      updatedData['phone_number'] = phoneController.text;
-    }
-    if (emailController.text != widget.currentData['email']) {
-      updatedData['email'] = emailController.text;
-    }
-    if (birthdateController.text != widget.currentData['birthdate']) {
-      updatedData['birthdate'] = birthdateController.text;
-    }
-    
-    if (selectedImageFile != null) {
+      if (selectedImageFile != null) {
         try {
           print('Reading image file...');
           List<int> imageBytes = await selectedImageFile!.readAsBytes();
           print('Image size: ${imageBytes.length} bytes');
-          String base64Image = "data:image/jpeg;base64," + base64Encode(imageBytes);
+          String base64Image =
+              "data:image/jpeg;base64," + base64Encode(imageBytes);
           print('Base64 image length: ${base64Image.length}');
           updatedData['avatar'] = base64Image;
         } catch (e, stackTrace) {
@@ -132,45 +134,49 @@ class _EditProfilePageState extends State<EditProfilePage> {
         }
       }
 
-    if (updatedData.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No changes detected')),
-      );
-      return;
-    }
-
-    final response = await request.post(url, jsonEncode(updatedData));
-
-    // Tambahkan file avatar jika ada
-      
-
-    // final response = await request.post(url, jsonEncode(formData));
-    print('Response received: $response');
-
-    if (response['status'] == 'success') {
-      if (mounted) {
-        Navigator.pop(context, response['data']);
+      if (updatedData.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
+          const SnackBar(content: Text('No changes detected')),
+        );
+        return;
+      }
+
+      final response = await request.post(url, jsonEncode(updatedData));
+
+      // Tambahkan file avatar jika ada
+
+      // final response = await request.post(url, jsonEncode(formData));
+      print('Response received: $response');
+
+      if (response['status'] == 'success') {
+        if (mounted) {
+          // Pop with the updated data
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MyProfilePage(),
+              ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Profile updated successfully')),
+          );
+        }
+      } else {
+        throw Exception(response['message']);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to save changes: $e')),
         );
       }
-    } else {
-      throw Exception(response['message']);
-    }
-  } catch (e) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save changes: $e')),
-      );
-    }
-  } finally {
-    if (mounted) {
-      setState(() {
-        isSaving = false;
-      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          isSaving = false;
+        });
+      }
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {
