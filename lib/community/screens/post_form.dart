@@ -74,37 +74,41 @@ class _PostFormState extends State<PostForm> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _isLoading ? null : () async {
-                if (!_formKey.currentState!.validate()) return;
+              onPressed: _isLoading
+                  ? null
+                  : () async {
+                      if (!_formKey.currentState!.validate()) return;
 
-                setState(() => _isLoading = true);
+                      setState(() => _isLoading = true);
 
-                try {
-                  final postService = PostService(
-                    //activeUrl: 'http://127.0.0.1:8000/community/',
-                    activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/',
-                    cookieRequest: cookieRequest,
-                  );
+                      try {
+                        final postService = PostService(
+                          activeUrl: 'http://127.0.0.1:8000/community/',
+                          // activeUrl:
+                          //     'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/',
+                          cookieRequest: cookieRequest,
+                        );
 
-                  final newPost = await postService.createPost(
-                    title: _titleController.text,
-                    content: _contentController.text,
-                  );
+                        final newPost = await postService.createPost(
+                          title: _titleController.text,
+                          content: _contentController.text,
+                        );
 
-                  widget.onPostCreated(newPost);
-                  Navigator.pop(context);
+                        widget.onPostCreated(newPost);
+                        Navigator.pop(context);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Post created successfully!')),
-                  );
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error creating post: $e')),
-                  );
-                } finally {
-                  setState(() => _isLoading = false);
-                }
-              },
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Post created successfully!')),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error creating post: $e')),
+                        );
+                      } finally {
+                        setState(() => _isLoading = false);
+                      }
+                    },
               child: _isLoading
                   ? const SizedBox(
                       height: 20,

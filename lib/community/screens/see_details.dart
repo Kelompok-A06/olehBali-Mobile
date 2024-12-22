@@ -27,7 +27,7 @@ class _SeeDetailsState extends State<SeeDetails> {
     super.initState();
     cookieRequest = Provider.of<CookieRequest>(context, listen: false);
     _postService = PostService(
-      //activeUrl: 'http://127.0.0.1:8000/community/',
+      // activeUrl: 'http://127.0.0.1:8000/community/',
       activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/',
       cookieRequest: cookieRequest,
     );
@@ -36,7 +36,7 @@ class _SeeDetailsState extends State<SeeDetails> {
 
   Future<void> fetchComments() async {
     if (_isLoading) return;
-    
+
     setState(() => _isLoading = true);
     try {
       final fetchedComments = await _postService.fetchComments(widget.post.id);
@@ -59,22 +59,24 @@ class _SeeDetailsState extends State<SeeDetails> {
         postId: widget.post.id,
         content: content,
       );
-      
+
       setState(() {
-        comments.insert(0, Comment(
-          id: response.id,
-          content: response.content,
-          author: response.author,
-          createdAt: response.createdAt,
-          isAuthor: true,
-        ));
+        comments.insert(
+            0,
+            Comment(
+              id: response.id,
+              content: response.content,
+              author: response.author,
+              createdAt: response.createdAt,
+              isAuthor: true,
+            ));
         _commentController.clear();
       });
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Comment added successfully!')),
       );
-        } catch (e) {
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to create comment: $e')),
       );
@@ -130,76 +132,77 @@ class _SeeDetailsState extends State<SeeDetails> {
       ),
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.7,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          builder: (_, controller) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              padding: EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                top: 16.0,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
-              ),
-              child: ListView(
-                controller: controller,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(2),
+            initialChildSize: 0.7,
+            minChildSize: 0.5,
+            maxChildSize: 0.95,
+            builder: (_, controller) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                padding: EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                  top: 16.0,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
+                ),
+                child: ListView(
+                  controller: controller,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 4,
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
-                  ),
-                  const Text(
-                    'Add a Comment',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _commentController,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      labelText: 'Write your comment',
-                      border: const OutlineInputBorder(),
-                      enabled: !_isSubmitting,
+                    const Text(
+                      'Add a Comment',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _isSubmitting
-                        ? null
-                        : () {
-                            if (_commentController.text.trim().isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Comment cannot be empty')),
-                              );
-                              return;
-                            }
-                            createComment(_commentController.text.trim());
-                            Navigator.pop(context);
-                          },
-                    child: _isSubmitting
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Text('Post Comment'),
-                  ),
-                ],
-              ),
-            );
-          }
-        );
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _commentController,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        labelText: 'Write your comment',
+                        border: const OutlineInputBorder(),
+                        enabled: !_isSubmitting,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _isSubmitting
+                          ? null
+                          : () {
+                              if (_commentController.text.trim().isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Comment cannot be empty')),
+                                );
+                                return;
+                              }
+                              createComment(_commentController.text.trim());
+                              Navigator.pop(context);
+                            },
+                      child: _isSubmitting
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Text('Post Comment'),
+                    ),
+                  ],
+                ),
+              );
+            });
       },
     );
   }
@@ -313,24 +316,32 @@ class _SeeDetailsState extends State<SeeDetails> {
                                 children: [
                                   Text(
                                     widget.post.title,
-                                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 8),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         '${widget.post.author} • ${widget.post.createdAt}',
-                                        style: const TextStyle(color: Colors.grey),
+                                        style:
+                                            const TextStyle(color: Colors.grey),
                                       ),
                                       if (widget.post.isAuthor)
                                         ElevatedButton.icon(
-                                          icon: const Icon(Icons.delete, color: Colors.white),
-                                          label: const Text('Delete Post', style: TextStyle(color: Colors.white)),
+                                          icon: const Icon(Icons.delete,
+                                              color: Colors.white),
+                                          label: const Text('Delete Post',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.red,
                                           ),
-                                          onPressed: () => showDeletePostDialog(),
+                                          onPressed: () =>
+                                              showDeletePostDialog(),
                                         ),
                                     ],
                                   ),
@@ -347,16 +358,17 @@ class _SeeDetailsState extends State<SeeDetails> {
                       ],
                     ),
                   ),
-                  
+
                   // Comments Section
                   const Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Text(
                       'Comments',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  
+
                   if (_isLoading)
                     const Center(child: CircularProgressIndicator())
                   else if (comments.isEmpty)
@@ -369,7 +381,7 @@ class _SeeDetailsState extends State<SeeDetails> {
                     )
                   else
                     ...comments.map(buildCommentCard),
-                  
+
                   // Bottom padding for last comment
                   const SizedBox(height: 16),
                 ],

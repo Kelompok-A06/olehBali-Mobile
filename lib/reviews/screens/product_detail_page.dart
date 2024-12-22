@@ -28,11 +28,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Product? product;
   double averageRating = 0;
 
-  Future<List<Reviews2>> fetchCurrentProductReviews(CookieRequest request) async {
+  Future<List<Reviews2>> fetchCurrentProductReviews(
+      CookieRequest request) async {
     int productId = widget.productId;
 
     // Fetch informasi produk
-    final response1 = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-product/$productId');
+    // final response1 =
+    //     await request.get('127.0.0.1:8000/product/api-product/$productId');
+    final response1 = await request.get(
+    'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-product/$productId');
     var dataProduct = response1;
     averageRating = 0;
     if (dataProduct[0] != null) {
@@ -40,7 +44,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     // Fetch data review-review product
-    final response2 = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api/$productId');
+    // final response2 =
+    //     await request.get('127.0.0.1:8000/product/api/$productId');
+    final response2 = await request.get(
+    'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api/$productId');
     var data = response2;
     List<Reviews2> listReview = [];
     for (var d in data) {
@@ -113,9 +120,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       itemBuilder: (_, index) {
                         var review = snapshot.data![index];
                         Map<String, dynamic> jsonData = request.getJsonData();
-                        bool isCurrentUser = review.username == jsonData["username"];
+                        bool isCurrentUser =
+                            review.username == jsonData["username"];
                         return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
@@ -146,7 +155,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 children: [
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           review.comments,
@@ -161,14 +171,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   Column(
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
                                         decoration: BoxDecoration(
                                           color: Colors.amber.shade100,
-                                          borderRadius: BorderRadius.circular(6),
+                                          borderRadius:
+                                              BorderRadius.circular(6),
                                         ),
                                         child: Row(
                                           children: [
-                                            const Icon(Icons.star, size: 16, color: Colors.amber),
+                                            const Icon(Icons.star,
+                                                size: 16, color: Colors.amber),
                                             const SizedBox(width: 4),
                                             Text(
                                               "${review.ratings}",
@@ -189,7 +202,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start, // Align buttons to the left
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .start, // Align buttons to the left
                                     children: [
                                       // Edit Button
                                       ElevatedButton(
@@ -197,45 +211,62 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                           showDialog(
                                               context: context,
                                               builder: (context) => ReviewForm(
-                                                  onSubmit: (rating, comment) async {
-                                                    int reviewId = review.id;
-                                                    int productId = product!.pk;
-                                                    final response = await request.postJson(
-                                                      "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/add-review-flutter/",
-                                                      jsonEncode(<String, String>{
-                                                        'ratings': '$rating',
-                                                        'id' : '$productId',
-                                                        'comments' : comment,
-                                                        'review_id' : '$reviewId',
-                                                      }),
-                                                    );
-                                                    if (context.mounted) {
-                                                      if (response['status'] == 'updated') {
-                                                        ScaffoldMessenger.of(context)
-                                                            .showSnackBar(const SnackBar(
-                                                          content: Text("Review berhasil diupdate!"),
-                                                        ));
-                                                        update();
-                                                      } else {
-                                                        ScaffoldMessenger.of(context)
-                                                            .showSnackBar(const SnackBar(
-                                                          content:
-                                                          Text("Terdapat kesalahan, silakan coba lagi."),
-                                                        ));
-                                                    }
-                                                  }
-                                                },
-                                                initialRating: review.ratings,
-                                                initialComment: review.comments,
-                                              )
-                                          );
+                                                    onSubmit: (rating,
+                                                        comment) async {
+                                                      int reviewId = review.id;
+                                                      int productId =
+                                                          product!.pk;
+                                                      final response =
+                                                          await request
+                                                              .postJson(
+                                                        "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/add-review-flutter/",
+                                                        jsonEncode(<String,
+                                                            String>{
+                                                          'ratings': '$rating',
+                                                          'id': '$productId',
+                                                          'comments': comment,
+                                                          'review_id':
+                                                              '$reviewId',
+                                                        }),
+                                                      );
+                                                      if (context.mounted) {
+                                                        if (response[
+                                                                'status'] ==
+                                                            'updated') {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  const SnackBar(
+                                                            content: Text(
+                                                                "Review berhasil diupdate!"),
+                                                          ));
+                                                          update();
+                                                        } else {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  const SnackBar(
+                                                            content: Text(
+                                                                "Terdapat kesalahan, silakan coba lagi."),
+                                                          ));
+                                                        }
+                                                      }
+                                                    },
+                                                    initialRating:
+                                                        review.ratings,
+                                                    initialComment:
+                                                        review.comments,
+                                                  ));
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blue,
                                         ),
-                                        child: const Text("Edit", style: TextStyle(color: Colors.white)),
+                                        child: const Text("Edit",
+                                            style:
+                                                TextStyle(color: Colors.white)),
                                       ),
-                                      const SizedBox(width: 8), // Space between buttons
+                                      const SizedBox(
+                                          width: 8), // Space between buttons
                                       // Delete Button
                                       ElevatedButton(
                                         onPressed: () {
@@ -244,21 +275,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                             builder: (BuildContext context) {
                                               return AlertDialog(
                                                 title: const Text("Confirm"),
-                                                content: const Text("Are you sure you want to delete this review?"),
+                                                content: const Text(
+                                                    "Are you sure you want to delete this review?"),
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () {
-                                                      Navigator.of(context).pop(false); // Close dialog with "Cancel"
+                                                      Navigator.of(context).pop(
+                                                          false); // Close dialog with "Cancel"
                                                     },
                                                     child: const Text("Cancel"),
                                                   ),
                                                   TextButton(
                                                     onPressed: () async {
-                                                      Navigator.of(context).pop(true); // Close dialog with "OK"
+                                                      Navigator.of(context).pop(
+                                                          true); // Close dialog with "OK"
                                                     },
                                                     child: const Text(
                                                       "OK",
-                                                      style: TextStyle(color: Colors.red),
+                                                      style: TextStyle(
+                                                          color: Colors.red),
                                                     ),
                                                   ),
                                                 ],
@@ -267,24 +302,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                           ).then((confirmed) async {
                                             if (confirmed == true) {
                                               int reviewId = review.id;
-                                              final response = await request.postJson(
+                                              final response =
+                                                  await request.postJson(
                                                 "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/delete-flutter/",
                                                 jsonEncode(<String, String>{
                                                   "id": "$reviewId",
                                                 }),
                                               );
                                               if (context.mounted) {
-                                                if (response['status'] == 'DELETED') {
-                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                if (response['status'] ==
+                                                    'DELETED') {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
                                                     const SnackBar(
-                                                      content: Text("Review berhasil didelete!"),
+                                                      content: Text(
+                                                          "Review berhasil didelete!"),
                                                     ),
                                                   );
                                                   update();
                                                 } else {
-                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
                                                     const SnackBar(
-                                                      content: Text("Terdapat kesalahan, silakan coba lagi."),
+                                                      content: Text(
+                                                          "Terdapat kesalahan, silakan coba lagi."),
                                                     ),
                                                   );
                                                 }
@@ -293,9 +334,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                           });
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red, // Red color for delete button
+                                          backgroundColor: Colors
+                                              .red, // Red color for delete button
                                         ),
-                                        child: const Text("Delete", style: TextStyle(color: Colors.white)),
+                                        child: const Text("Delete",
+                                            style:
+                                                TextStyle(color: Colors.white)),
                                       )
                                     ],
                                   ),

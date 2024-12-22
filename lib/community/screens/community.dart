@@ -17,8 +17,9 @@ class Community extends StatefulWidget {
 class _CommunityState extends State<Community> {
   List<Post> posts = [];
   bool _isLoading = false;
-  //final String baseUrl = 'http://127.0.0.1:8000/community/';
-  final String baseUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/';
+  // final String baseUrl = 'http://127.0.0.1:8000/community/';
+  final String baseUrl =
+      'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/';
   late final CookieRequest cookieRequest;
 
   @override
@@ -34,10 +35,11 @@ class _CommunityState extends State<Community> {
     setState(() => _isLoading = true);
 
     try {
-      final postService = PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
+      final postService =
+          PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
 
       final fetchedPosts = await postService.fetchPosts();
-      
+
       setState(() {
         posts = fetchedPosts;
       });
@@ -66,32 +68,31 @@ class _CommunityState extends State<Community> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "Oleh",
-                    style: GoogleFonts.lato(
-                      textStyle: const TextStyle(
-                        color: Color.fromARGB(255, 3, 164, 193),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    )
-                  ),
+                      text: "Oleh",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Color.fromARGB(255, 3, 164, 193),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      )),
                   TextSpan(
-                    text: "Bali",
-                    style: GoogleFonts.lato(
-                      textStyle: const TextStyle(
-                        color: Color.fromARGB(255, 254, 150, 66),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    )
-                  ),
+                      text: "Bali",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Color.fromARGB(255, 254, 150, 66),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      )),
                 ],
               ),
             ),
           ],
         ),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
+        iconTheme:
+            const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
       ),
       drawer: const LeftDrawer(),
       body: Stack(
@@ -132,7 +133,10 @@ class _CommunityState extends State<Community> {
                     children: [
                       Text(
                         'Community',
-                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 16),
@@ -147,7 +151,7 @@ class _CommunityState extends State<Community> {
                 ),
                 _isLoading
                     ? const Center(child: CircularProgressIndicator())
-                    : posts.isEmpty 
+                    : posts.isEmpty
                         ? const Center(child: Text('No posts available'))
                         : ListView.builder(
                             shrinkWrap: true,
@@ -155,7 +159,9 @@ class _CommunityState extends State<Community> {
                             itemCount: posts.length,
                             itemBuilder: (context, index) {
                               final post = posts[index];
-                              return PostCard(post: post, onDelete: () => _deletePost(post));
+                              return PostCard(
+                                  post: post,
+                                  onDelete: () => _deletePost(post));
                             },
                           ),
                 const SizedBox(height: 80), // Add some space at the bottom
@@ -189,97 +195,100 @@ class _CommunityState extends State<Community> {
       ),
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.7,  // Akan menampilkan 70% dari layar
-          minChildSize: 0.5,      // Minimum 50% dari layar
-          maxChildSize: 0.95,     // Maximum 95% dari layar
-          builder: (_, controller) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              padding: EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                top: 16.0,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
-              ),
-              child: ListView(
-                controller: controller,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(2),
+            initialChildSize: 0.7, // Akan menampilkan 70% dari layar
+            minChildSize: 0.5, // Minimum 50% dari layar
+            maxChildSize: 0.95, // Maximum 95% dari layar
+            builder: (_, controller) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                padding: EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                  top: 16.0,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
+                ),
+                child: ListView(
+                  controller: controller,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 4,
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
-                  ),
-                  const Text(
-                    'Create a New Post',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: titleController,
-                    decoration: const InputDecoration(
-                      labelText: 'Title',
-                      border: OutlineInputBorder(),
+                    const Text(
+                      'Create a New Post',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: contentController,
-                    maxLines: 5,
-                    decoration: const InputDecoration(
-                      labelText: 'Content',
-                      border: OutlineInputBorder(),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: titleController,
+                      decoration: const InputDecoration(
+                        labelText: 'Title',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (titleController.text.isEmpty || contentController.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please fill in all fields')),
-                        );
-                        return;
-                      }
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: contentController,
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                        labelText: 'Content',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (titleController.text.isEmpty ||
+                            contentController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Please fill in all fields')),
+                          );
+                          return;
+                        }
 
-                      try {
-                        final postService = PostService(
-                          activeUrl: baseUrl,
-                          cookieRequest: cookieRequest,
-                        );
-                        final newPost = await postService.createPost(
-                          title: titleController.text,
-                          content: contentController.text,
-                        );
+                        try {
+                          final postService = PostService(
+                            activeUrl: baseUrl,
+                            cookieRequest: cookieRequest,
+                          );
+                          final newPost = await postService.createPost(
+                            title: titleController.text,
+                            content: contentController.text,
+                          );
 
-                        setState(() {
-                          posts.insert(0, newPost);
-                        });
+                          setState(() {
+                            posts.insert(0, newPost);
+                          });
 
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Post created successfully!')),
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error creating post: $e')),
-                        );
-                      }
-                    },
-                    child: const Text('Create Post'),
-                  ),
-                ],
-              ),
-            );
-          }
-        );
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Post created successfully!')),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error creating post: $e')),
+                          );
+                        }
+                      },
+                      child: const Text('Create Post'),
+                    ),
+                  ],
+                ),
+              );
+            });
       },
     );
   }
@@ -287,13 +296,15 @@ class _CommunityState extends State<Community> {
   Future<void> _deletePost(Post post) async {
     if (!post.isAuthor) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You are not authorized to delete this post')),
+        const SnackBar(
+            content: Text('You are not authorized to delete this post')),
       );
       return;
     }
 
     try {
-      final postService = PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
+      final postService =
+          PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
       final success = await postService.deletePost(post.id);
 
       if (success) {
@@ -316,7 +327,8 @@ class PostCard extends StatelessWidget {
   final Post post;
   final Function() onDelete;
 
-  const PostCard({super.key, 
+  const PostCard({
+    super.key,
     required this.post,
     required this.onDelete,
   });
@@ -381,13 +393,15 @@ class PostCard extends StatelessWidget {
                         ),
                         if (post.isAuthor)
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                            icon: const Icon(Icons.delete,
+                                color: Colors.red, size: 20),
                             onPressed: () {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
                                   title: const Text('Delete Post'),
-                                  content: const Text('Are you sure you want to delete this post?'),
+                                  content: const Text(
+                                      'Are you sure you want to delete this post?'),
                                   actions: [
                                     TextButton(
                                       child: const Text('Cancel'),
