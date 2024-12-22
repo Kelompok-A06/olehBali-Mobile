@@ -25,7 +25,6 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
     try {
       final response = await request.post(
         'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/delete-account-flutter/',
-
         jsonEncode({
           'confirm': true,
         }),

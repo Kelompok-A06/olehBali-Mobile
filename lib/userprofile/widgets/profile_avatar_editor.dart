@@ -43,7 +43,7 @@ class ProfileAvatarEditor extends StatelessWidget {
               backgroundImage: currentAvatarUrl.startsWith('http')
                   ? NetworkImage(currentAvatarUrl)
                   : currentAvatarUrl.startsWith('/')
-                      ? NetworkImage('http://127.0.0.1:8000$currentAvatarUrl')
+                      ? NetworkImage('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$currentAvatarUrl')
                       : null,
               child: currentAvatarUrl.isEmpty
                   ? const Icon(Icons.person, size: 50, color: Colors.grey)
