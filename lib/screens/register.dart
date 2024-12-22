@@ -145,17 +145,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       String password2 = _confirmPasswordController.text;
                       String role = _selectedRole!;
                       try {
-                        // final response = await request.postJson(
-                        //   "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/register-flutter/",
-                        //   jsonEncode({
-                        //     "username": username,
-                        //     "password1": password1,
-                        //     "password2": password2,
-                        //     "role": role,
-                        //   }),
-                        // );
                         final response = await request.postJson(
-                          "http://127.0.0.1:8000/register-flutter/",
+                          "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/register-flutter/",
                           jsonEncode({
                             "username": username,
                             "password1": password1,

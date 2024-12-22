@@ -31,8 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
 
   Future<String> fetchUserName(CookieRequest request) async {
-    // final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
-    final response = await request.get('http://127.0.0.1:8000/userprofile/api/profile/');
+    final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
     final profile = Profile.fromJson(response[0]);
     return profile.fields.name;
   }

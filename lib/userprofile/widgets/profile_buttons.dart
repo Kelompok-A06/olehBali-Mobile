@@ -23,21 +23,22 @@ class ProfileButtons extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onEditProfile,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            backgroundColor: Colors.deepOrange,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text(
-              'Edit Profile',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            elevation: 2,
+          ),
+          child: const Text(
+            'Edit Profile',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
+        ),
         ),
         const SizedBox(height: 12),
         if (role != 'owner') 
@@ -46,12 +47,13 @@ class ProfileButtons extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onMyWishlist,
             style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
               backgroundColor: Colors.brown,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 15),
+              
             ),
             child: const Text(
               'My Wishlist',
@@ -68,12 +70,12 @@ class ProfileButtons extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onDeleteAccount,
             style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 15),
             ),
             child: const Text(
               'Delete Account',
