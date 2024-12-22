@@ -31,6 +31,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     _profileFuture = _fetchUserProfile();
   }
 
+<<<<<<< HEAD
   Future<Profile> _fetchUserProfile() async {
     Profile profile = Profile(
       model: "none", 
@@ -49,6 +50,25 @@ class _MyProfilePageState extends State<MyProfilePage> {
       final response = await _request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
       profile = Profile.fromJson(response[0]);
       final roleResponse = await _request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
+=======
+  Future<Profile> fetchUserProfile(CookieRequest request) async {
+    // Ambil data dari server
+    //var url = Uri.parse('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api/profile/');
+    Profile profile = Profile(model: "none", pk: 1, fields: Fields(user: 1, name: "Fail", phoneNumber: "Fail", email: "Fail", birthdate: "Fail", avatar: "Fail"));
+    try {
+      final response = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/profile/');
+      //final response = await request.get('http://127.0.0.1:8000/userprofile/api/profile/');
+      print(response);
+      profile = Profile.fromJson(response[0]);
+       final roleResponse = await request.get('https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/api/get-role/');
+       //final roleResponse = await request.get('http://127.0.0.1:8000/userprofile/api/get-role/');
+      // Null check for each field before assignment
+       String avatarUrl = profile.fields.avatar ?? '';
+      if (avatarUrl.isNotEmpty && !avatarUrl.startsWith('http')) {
+        avatarUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/$avatarUrl';
+        //avatarUrl = 'http://127.0.0.1:8000/$avatarUrl';
+      }
+>>>>>>> 0fe56a1e0c1686a9c3fcaf7035a8fc6093e29808
       
       userProfile["name"] = profile.fields.name ?? '';
       userProfile["phone_number"] = profile.fields.phoneNumber ?? '';

@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:http/http.dart' as http;
 import 'package:olehbali_mobile/userprofile/widgets/editable_text_field.dart';
+=======
+>>>>>>> 0fe56a1e0c1686a9c3fcaf7035a8fc6093e29808
 import 'package:olehbali_mobile/userprofile/widgets/profile_avatar_editor.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'dart:convert';
@@ -96,6 +99,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final request = context.read<CookieRequest>();
     // const url = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/update_profile_flutter/';
     const url = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/userprofile/update_profile_flutter/';
+    //const url = 'http://127.0.0.1:8000/userprofile/update_profile_flutter/';
 
     final updatedData = <String, dynamic>{};
     // var formData = <String, dynamic>{

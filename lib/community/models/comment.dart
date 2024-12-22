@@ -1,61 +1,34 @@
-// To parse this JSON data, do
-//
-//     final comment = commentFromJson(jsonString);
-
-import 'dart:convert';
-
-List<Comment> commentFromJson(String str) => List<Comment>.from(json.decode(str).map((x) => Comment.fromJson(x)));
-
-String commentToJson(List<Comment> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
+// comment.dart
 class Comment {
-    String model;
-    int pk;
-    Fields fields;
+    final int id;
+    final String content;
+    final String author;
+    final String createdAt;
+    final bool isAuthor;
 
     Comment({
-        required this.model,
-        required this.pk,
-        required this.fields,
-    });
-
-    factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-        model: json["model"],
-        pk: json["pk"],
-        fields: Fields.fromJson(json["fields"]),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "model": model,
-        "pk": pk,
-        "fields": fields.toJson(),
-    };
-}
-
-class Fields {
-    int post;
-    int author;
-    String content;
-    DateTime createdAt;
-
-    Fields({
-        required this.post,
-        required this.author,
+        required this.id,
         required this.content,
+        required this.author,
         required this.createdAt,
+        required this.isAuthor,
     });
 
-    factory Fields.fromJson(Map<String, dynamic> json) => Fields(
-        post: json["post"],
-        author: json["author"],
-        content: json["content"],
-        createdAt: DateTime.parse(json["created_at"]),
-    );
+    factory Comment.fromJson(Map<String, dynamic> json) {
+        return Comment(
+            id: json['id'] ?? 0,
+            content: json['content'] ?? 'No Content',
+            author: json['author']?.toString() ?? 'Unknown',
+            createdAt: json['created_at'] ?? '',
+            isAuthor: json['is_author'] ?? false,
+        );
+    }
 
     Map<String, dynamic> toJson() => {
-        "post": post,
-        "author": author,
-        "content": content,
-        "created_at": createdAt.toIso8601String(),
+        'id': id,
+        'content': content,
+        'author': author,
+        'created_at': createdAt,
+        'is_author': isAuthor,
     };
 }
