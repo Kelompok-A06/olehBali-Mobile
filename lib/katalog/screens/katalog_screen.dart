@@ -10,8 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../reviews/screens/product_detail_page.dart';
 
 class ProductService {
-  static const String apiUrl = 'http://127.0.0.1:8000/api';
-  static const String catalogUrl = 'http://127.0.0.1:8000/catalog';
+  static const String apiUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api';
+  static const String catalogUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/catalog';
 
   static String? currentUserRole;
   static String? currentUsername;
