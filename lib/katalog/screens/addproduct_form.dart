@@ -220,7 +220,7 @@ class _AddProductFormState extends State<AddProductForm> {
                       }
 
                       final response = await request.postJson(
-                        "http://127.0.0.1:8000/api/add_product/",
+                        "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api/add_product/",
                         jsonEncode({
                           'nama': _nameController.text,
                           'kategori': _selectedCategory,

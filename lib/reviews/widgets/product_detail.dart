@@ -18,10 +18,39 @@ class ProductDetail extends StatelessWidget {
     required this.onReviewSubmitted,
   });
 
+  Widget buildProductImage() {
+    if (product.fields.gambar.isNotEmpty) {
+      return Image.network(
+        product.fields.gambar,
+        height: 200,
+        width: double.infinity,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return const Center(child: Icon(Icons.error));
+        },
+      );
+    } else if (product.fields.gambarFile.isNotEmpty) {
+      try {
+        final imageBytes = base64Decode(product.fields.gambarFile);
+        return Image.memory(
+          imageBytes,
+          height: 200,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return const Center(child: Icon(Icons.error));
+          },
+        );
+      } catch (e) {
+        return const Center(child: Icon(Icons.image_not_supported));
+      }
+    } else {
+      return const Center(child: Icon(Icons.image_not_supported));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Determine the image source (URL or local file path)
-    String imageUrl = product.fields.gambar.isNotEmpty ? product.fields.gambar : product.fields.gambarFile;
     final request = context.watch<CookieRequest>();
 
     return Card(
@@ -37,14 +66,7 @@ class ProductDetail extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Image (URL or placeholder if no image)
-              imageUrl.isNotEmpty
-                  ? Image.network(imageUrl, width: double.infinity, height: 200, fit: BoxFit.cover)
-                  : Container(
-                    width: double.infinity,
-                    height: 200,
-                    color: Colors.grey[300],
-                    child: const Center(child: Icon(Icons.image, size: 50, color: Colors.white)),
-              ),
+              buildProductImage(),
               const SizedBox(height: 12),
               // Product Name
               Text(
