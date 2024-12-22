@@ -101,7 +101,7 @@ class _EditableTextFieldState extends State<EditableTextField> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Colors.deepOrange,
               width: 2,
             ),

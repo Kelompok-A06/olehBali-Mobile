@@ -8,15 +8,18 @@ import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Community extends StatefulWidget {
+  const Community({super.key});
+
   @override
-  _CommunityState createState() => _CommunityState();
+  State<StatefulWidget> createState() => _CommunityState();
 }
 
 class _CommunityState extends State<Community> {
   List<Post> posts = [];
   bool _isLoading = false;
-  final String baseUrl = 'http://127.0.0.1:8000/community/';
-  // final String baseUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/';
+  // final String baseUrl = 'http://127.0.0.1:8000/community/';
+  final String baseUrl =
+      'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/';
   late final CookieRequest cookieRequest;
 
   @override
@@ -35,17 +38,12 @@ class _CommunityState extends State<Community> {
       final postService =
           PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
 
-      print('Fetching posts from: ${baseUrl}json/');
-
       final fetchedPosts = await postService.fetchPosts();
-
-      print('Fetched ${fetchedPosts.length} posts');
 
       setState(() {
         posts = fetchedPosts;
       });
     } catch (e) {
-      print('Detailed fetch error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error fetching posts: $e')),
       );
@@ -104,7 +102,7 @@ class _CommunityState extends State<Community> {
             child: ListView(
               children: [
                 Container(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.0),
                     child: Image.network(
@@ -129,8 +127,8 @@ class _CommunityState extends State<Community> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
@@ -152,22 +150,21 @@ class _CommunityState extends State<Community> {
                   ),
                 ),
                 _isLoading
-                    ? Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator())
                     : posts.isEmpty
-                        ? Center(child: Text('No posts available'))
+                        ? const Center(child: Text('No posts available'))
                         : ListView.builder(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: posts.length,
                             itemBuilder: (context, index) {
                               final post = posts[index];
-                              print('Rendering post ${index}: ${post.title}');
                               return PostCard(
                                   post: post,
                                   onDelete: () => _deletePost(post));
                             },
                           ),
-                SizedBox(height: 80), // Add some space at the bottom
+                const SizedBox(height: 80), // Add some space at the bottom
               ],
             ),
           ),
@@ -178,7 +175,7 @@ class _CommunityState extends State<Community> {
               onPressed: () {
                 _showCreatePostModal(context);
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             ),
           ),
         ],
@@ -187,13 +184,13 @@ class _CommunityState extends State<Community> {
   }
 
   void _showCreatePostModal(BuildContext context) {
-    final _titleController = TextEditingController();
-    final _contentController = TextEditingController();
+    final titleController = TextEditingController();
+    final contentController = TextEditingController();
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
@@ -203,7 +200,7 @@ class _CommunityState extends State<Community> {
             maxChildSize: 0.95, // Maximum 95% dari layar
             builder: (_, controller) {
               return Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
@@ -220,42 +217,42 @@ class _CommunityState extends State<Community> {
                       child: Container(
                         width: 40,
                         height: 4,
-                        margin: EdgeInsets.only(bottom: 16),
+                        margin: const EdgeInsets.only(bottom: 16),
                         decoration: BoxDecoration(
                           color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Create a New Post',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
-                      controller: _titleController,
-                      decoration: InputDecoration(
+                      controller: titleController,
+                      decoration: const InputDecoration(
                         labelText: 'Title',
                         border: OutlineInputBorder(),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
-                      controller: _contentController,
+                      controller: contentController,
                       maxLines: 5,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Content',
                         border: OutlineInputBorder(),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () async {
-                        if (_titleController.text.isEmpty ||
-                            _contentController.text.isEmpty) {
+                        if (titleController.text.isEmpty ||
+                            contentController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                            const SnackBar(
                                 content: Text('Please fill in all fields')),
                           );
                           return;
@@ -267,8 +264,8 @@ class _CommunityState extends State<Community> {
                             cookieRequest: cookieRequest,
                           );
                           final newPost = await postService.createPost(
-                            title: _titleController.text,
-                            content: _contentController.text,
+                            title: titleController.text,
+                            content: contentController.text,
                           );
 
                           setState(() {
@@ -277,7 +274,7 @@ class _CommunityState extends State<Community> {
 
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                            const SnackBar(
                                 content: Text('Post created successfully!')),
                           );
                         } catch (e) {
@@ -286,7 +283,7 @@ class _CommunityState extends State<Community> {
                           );
                         }
                       },
-                      child: Text('Create Post'),
+                      child: const Text('Create Post'),
                     ),
                   ],
                 ),
@@ -299,7 +296,8 @@ class _CommunityState extends State<Community> {
   Future<void> _deletePost(Post post) async {
     if (!post.isAuthor) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('You are not authorized to delete this post')),
+        const SnackBar(
+            content: Text('You are not authorized to delete this post')),
       );
       return;
     }
@@ -314,7 +312,7 @@ class _CommunityState extends State<Community> {
           posts.removeWhere((p) => p.id == post.id);
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Post deleted successfully!')),
+          const SnackBar(content: Text('Post deleted successfully!')),
         );
       }
     } catch (e) {
@@ -329,7 +327,8 @@ class PostCard extends StatelessWidget {
   final Post post;
   final Function() onDelete;
 
-  PostCard({
+  const PostCard({
+    super.key,
     required this.post,
     required this.onDelete,
   });
@@ -337,7 +336,7 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       elevation: 1,
       child: InkWell(
         onTap: () {
@@ -362,7 +361,7 @@ class PostCard extends StatelessWidget {
                   color: Colors.lightBlue[200],
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               // Content Section
               Expanded(
                 child: Column(
@@ -376,15 +375,15 @@ class PostCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${post.author}',
-                                style: TextStyle(
+                                post.author,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
                               ),
                               Text(
                                 post.createdAt,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 14,
                                 ),
@@ -394,22 +393,22 @@ class PostCard extends StatelessWidget {
                         ),
                         if (post.isAuthor)
                           IconButton(
-                            icon:
-                                Icon(Icons.delete, color: Colors.red, size: 20),
+                            icon: const Icon(Icons.delete,
+                                color: Colors.red, size: 20),
                             onPressed: () {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text('Delete Post'),
-                                  content: Text(
+                                  title: const Text('Delete Post'),
+                                  content: const Text(
                                       'Are you sure you want to delete this post?'),
                                   actions: [
                                     TextButton(
-                                      child: Text('Cancel'),
+                                      child: const Text('Cancel'),
                                       onPressed: () => Navigator.pop(context),
                                     ),
                                     TextButton(
-                                      child: Text('Delete'),
+                                      child: const Text('Delete'),
                                       onPressed: () {
                                         Navigator.pop(context);
                                         onDelete();
@@ -422,18 +421,18 @@ class PostCard extends StatelessWidget {
                           ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text(
                       post.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       post.content,
-                      style: TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 14),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),

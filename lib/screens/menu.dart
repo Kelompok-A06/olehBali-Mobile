@@ -22,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<ItemHomepage> items = [
     ItemHomepage("assets/images/logo_olehBali.png", "Katalog","Discover over 100 products available in Denpasar!", const MyHomePage()),
     ItemHomepage("assets/images/logo_olehBali.png", "Wishlist","Easily save various products you like.", const MyHomePage()),
-    ItemHomepage("assets/images/logo_olehBali.png", "Community","Discuss experiences and gain recommendations to find products.", Community()),
+    ItemHomepage("assets/images/logo_olehBali.png", "Community","Discuss experiences and gain recommendations to find products.", const Community()),
     ItemHomepage("assets/images/logo_olehBali.png", "Reviews","See what other people have to say.", const ReviewPage()),
 
   ];

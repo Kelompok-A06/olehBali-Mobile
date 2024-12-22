@@ -7,7 +7,7 @@ import 'package:olehbali_mobile/community/screens/post_service.dart';
 class PostForm extends StatefulWidget {
   final Function(Post) onPostCreated;
 
-  PostForm({required this.onPostCreated});
+  const PostForm({super.key, required this.onPostCreated});
 
   @override
   _PostFormState createState() => _PostFormState();
@@ -47,32 +47,32 @@ class _PostFormState extends State<PostForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               'Create a New Post',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextFormField(
               controller: _titleController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Title',
                 border: OutlineInputBorder(),
               ),
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Title is required' : null,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextFormField(
               controller: _contentController,
               maxLines: 5,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Content',
                 border: OutlineInputBorder(),
               ),
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Content is required' : null,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _isLoading
                   ? null
@@ -83,8 +83,9 @@ class _PostFormState extends State<PostForm> {
 
                       try {
                         final postService = PostService(
-                          activeUrl: 'http://127.0.0.1:8000/community/',
-                          // activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/',
+                          // activeUrl: 'http://127.0.0.1:8000/community/',
+                          activeUrl:
+                              'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/',
                           cookieRequest: cookieRequest,
                         );
 
@@ -97,7 +98,8 @@ class _PostFormState extends State<PostForm> {
                         Navigator.pop(context);
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Post created successfully!')),
+                          const SnackBar(
+                              content: Text('Post created successfully!')),
                         );
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -108,12 +110,12 @@ class _PostFormState extends State<PostForm> {
                       }
                     },
               child: _isLoading
-                  ? SizedBox(
+                  ? const SizedBox(
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : Text('Post'),
+                  : const Text('Post'),
             ),
           ],
         ),

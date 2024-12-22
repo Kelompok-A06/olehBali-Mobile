@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:olehbali_mobile/community/models/comment.dart';
-import 'package:olehbali_mobile/community/screens/post_service.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class AddComment {

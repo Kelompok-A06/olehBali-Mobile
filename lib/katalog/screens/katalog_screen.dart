@@ -11,10 +11,12 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../reviews/screens/product_detail_page.dart';
 
 class ProductService {
-  static const String apiUrl = 'http://127.0.0.1:8000/api';
-  static const String catalogUrl = 'http://127.0.0.1:8000/catalog';
-  // static const String apiUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api';
-  // static const String catalogUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/catalog';
+  // static const String apiUrl = 'http://127.0.0.1:8000/api';
+  // static const String catalogUrl = 'http://127.0.0.1:8000/catalog';
+  static const String apiUrl =
+      'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api';
+  static const String catalogUrl =
+      'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/catalog';
 
   static String? currentUserRole;
   static String? currentUsername;
@@ -143,16 +145,40 @@ class _CatalogPageState extends State<CatalogPage> {
     return Scaffold(
       drawer: const LeftDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CircleAvatar(
-                // backgroundImage: NetworkImage('https://example.com/your-avatar-url'),
-                ),
-          ),
-        ],
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/logo_olehBali.png',
+              fit: BoxFit.contain,
+              height: 42,
+            ),
+            const SizedBox(width: 8),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: "Oleh",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Color.fromARGB(255, 3, 164, 193),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      )),
+                  TextSpan(
+                      text: "Bali",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Color.fromARGB(255, 254, 150, 66),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -291,8 +317,8 @@ class _CatalogPageState extends State<CatalogPage> {
                   } else if (snapshot.hasData) {
                     return GridView.builder(
                       gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Set the number of columns
                         childAspectRatio: 2 / 3,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
