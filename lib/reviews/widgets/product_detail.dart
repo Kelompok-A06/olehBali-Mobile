@@ -206,6 +206,7 @@ class ProductDetail extends StatelessWidget {
                 },
                 child: const Text('Write a Review'),
               ),
+
             ],
           ),
         ),

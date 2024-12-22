@@ -506,7 +506,7 @@ class _CatalogPageState extends State<CatalogPage> {
                     },
                   )
                 else
-                  const SizedBox(width: 48),
+                  const SizedBox(width: 10),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
