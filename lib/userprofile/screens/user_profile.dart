@@ -4,8 +4,6 @@ import 'package:olehbali_mobile/userprofile/screens/edit_profile_page.dart';
 import 'package:olehbali_mobile/userprofile/widgets/profile_avatar.dart';
 import 'package:olehbali_mobile/userprofile/widgets/profile_buttons.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 

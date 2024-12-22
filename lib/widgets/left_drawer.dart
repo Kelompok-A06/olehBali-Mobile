@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
 import 'package:olehbali_mobile/screens/menu.dart';
 import 'package:olehbali_mobile/userprofile/screens/user_profile.dart';
-import 'package:olehbali_mobile/katalog/screens/katalog_screen.dart';
 import 'package:olehbali_mobile/community/screens/community.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
