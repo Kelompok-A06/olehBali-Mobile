@@ -1,8 +1,6 @@
 // post_service.dart
-import 'dart:convert';
 import 'package:olehbali_mobile/community/models/post.dart';
 import 'package:olehbali_mobile/community/models/comment.dart';
-import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class PostService {

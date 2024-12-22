@@ -101,7 +101,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Community(), // Ganti dengan nama halaman Community Anda
+                    builder: (context) => const Community(), // Ganti dengan nama halaman Community Anda
                   ));
             },
           ),
