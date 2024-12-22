@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/userprofile/screens/delete_account_page.dart';
 import 'package:olehbali_mobile/userprofile/screens/edit_profile_page.dart';
 import 'package:olehbali_mobile/userprofile/widgets/profile_buttons.dart';
-// import 'package:olehbali_mobile/wishlist/screens/WishlistScreen.dart';
+import 'package:olehbali_mobile/wishlist/screens/WishlistScreen.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import '../models/profile.dart';
@@ -184,12 +184,12 @@ Widget build(BuildContext context) {
                       }
                     },
                     onMyWishlist: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const WishlistScreen(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WishlistScreen(),
+                        ),
+                      );
                     },
                     onDeleteAccount: () {
                       Navigator.push(

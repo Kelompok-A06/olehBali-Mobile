@@ -3,6 +3,7 @@ import 'package:olehbali_mobile/reviews/screens/reviewpage.dart';
 import 'package:olehbali_mobile/screens/menu.dart';
 import 'package:olehbali_mobile/userprofile/screens/user_profile.dart';
 import 'package:olehbali_mobile/community/screens/community.dart';
+import 'package:olehbali_mobile/wishlist/screens/WishlistScreen.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import '../katalog/screens/katalog_screen.dart';
@@ -104,6 +105,18 @@ class LeftDrawer extends StatelessWidget {
                   ));
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.group),
+            title: const Text('My Wishlist'), 
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WishlistScreen(), 
+                  ));
+            },
+          ),
+
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Logout', style: TextStyle(color: Colors.red)),
