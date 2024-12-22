@@ -53,7 +53,8 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
+        iconTheme:
+            const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
       ),
       drawer: const LeftDrawer(),
       // Body halaman dengan padding di sekelilingnya.
