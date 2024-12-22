@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/katalog/models/product.dart';
 import 'package:olehbali_mobile/katalog/screens/addproduct_form.dart';
@@ -10,14 +11,17 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../reviews/screens/product_detail_page.dart';
 
 class ProductService {
-  static const String apiUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api';
-  static const String catalogUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/catalog';
+  static const String apiUrl = 'http://127.0.0.1:8000/api';
+  static const String catalogUrl = 'http://127.0.0.1:8000/catalog';
+  // static const String apiUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api';
+  // static const String catalogUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/catalog';
 
   static String? currentUserRole;
   static String? currentUsername;
 
-  Future<List<Product>> fetchProducts() async {
-    final response = await http.get(Uri.parse(apiUrl));
+  Future<List<Product>> fetchProducts(BuildContext context) async {
+    final request = context.read<CookieRequest>();
+    final response = await request.get(apiUrl);
 
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -27,8 +31,10 @@ class ProductService {
     }
   }
 
-  Future<List<Product>> fetchProductsByCategory(String category) async {
-    final response = await http.get(Uri.parse('$apiUrl/category/$category'));
+  Future<List<Product>> fetchProductsByCategory(
+      BuildContext context, String category) async {
+    final request = context.read<CookieRequest>();
+    final response = await request.get('$apiUrl/category/$category');
 
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -38,8 +44,10 @@ class ProductService {
     }
   }
 
-  Future<List<Product>> fetchProductsBySearch(String searchQuery) async {
-    final response = await http.get(Uri.parse('$apiUrl?search=$searchQuery'));
+  Future<List<Product>> fetchProductsBySearch(
+      BuildContext context, String searchQuery) async {
+    final request = context.read<CookieRequest>();
+    final response = await request.get('$apiUrl?search=$searchQuery');
 
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -58,17 +66,13 @@ class ProductService {
     return csrfToken ?? '';
   }
 
-  Future<bool> deleteProduct(int productId) async {
+  Future<bool> deleteProduct(BuildContext context, int productId) async {
     try {
-      final csrfToken = await getCsrfToken();
+      final request = context.read<CookieRequest>();
 
-      final response = await http.delete(
-        Uri.parse('$apiUrl/delete_product/$productId/'),
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken,
-          'Cookie': 'csrftoken=$csrfToken',
-        },
+      final response = await request.post(
+        '$apiUrl/delete_product/$productId/',
+        {},
       );
 
       if (response.statusCode == 200) {
@@ -83,25 +87,25 @@ class ProductService {
     }
   }
 
-  static Future<void> fetchCurrentUser() async {
+  static Future<void> fetchCurrentUser(BuildContext context) async {
     try {
-      final response = await http.get(
-        Uri.parse('$apiUrl/user/'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      final request = context.watch<CookieRequest>();
+      final response = await request.get(
+        ('$apiUrl/user/'),
       );
 
-      if (response.statusCode == 200) {
-        final userData = json.decode(response.body);
-        currentUsername = userData['username'];
-        currentUserRole = userData['role'];
+      if (response != null) {
+        currentUsername = response['username'];
+        currentUserRole = response['role'];
       } else {
+        print(
+            'User data: ${response["username"]}, ${response["role"]}'); // assuming username and role are the attributes
         currentUsername = null;
         currentUserRole = null;
-        throw Exception('Failed to load user data: ${response.statusCode}');
+        throw Exception('Failed to load user data');
       }
     } catch (e) {
+      print('User data error: ${e.toString()}'); // print the error message
       currentUsername = null;
       currentUserRole = null;
       rethrow;
@@ -117,7 +121,8 @@ class CatalogPage extends StatefulWidget {
 }
 
 class _CatalogPageState extends State<CatalogPage> {
-  late Future<List<Product>> productsFuture = ProductService().fetchProducts();
+  late Future<List<Product>> productsFuture =
+      ProductService().fetchProducts(context);
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -127,9 +132,9 @@ class _CatalogPageState extends State<CatalogPage> {
   }
 
   Future<void> _initializeData() async {
-    await ProductService.fetchCurrentUser();
+    await ProductService.fetchCurrentUser(context);
     setState(() {
-      productsFuture = ProductService().fetchProducts();
+      productsFuture = ProductService().fetchProducts(context);
     });
   }
 
@@ -195,7 +200,8 @@ class _CatalogPageState extends State<CatalogPage> {
                         onPressed: () {
                           setState(() {
                             productsFuture = ProductService()
-                                .fetchProductsBySearch(_searchController.text);
+                                .fetchProductsBySearch(
+                                    context, _searchController.text);
                           });
                         },
                         padding: const EdgeInsets.all(8.0),
@@ -226,7 +232,7 @@ class _CatalogPageState extends State<CatalogPage> {
                             onProductAdded: () {
                               setState(() {
                                 productsFuture =
-                                    ProductService().fetchProducts();
+                                    ProductService().fetchProducts(context);
                               });
                             },
                           ),
@@ -236,21 +242,21 @@ class _CatalogPageState extends State<CatalogPage> {
                   _buildCategoryButton("All", Icons.view_list, Colors.black,
                       () {
                     setState(() {
-                      productsFuture = ProductService().fetchProducts();
+                      productsFuture = ProductService().fetchProducts(context);
                     });
                   }),
                   _buildCategoryButton(
                       "Makanan/Minuman", Icons.fastfood_sharp, Colors.red, () {
                     setState(() {
                       productsFuture = ProductService()
-                          .fetchProductsByCategory("makanan_minuman");
+                          .fetchProductsByCategory(context, "makanan_minuman");
                     });
                   }),
                   _buildCategoryButton(
                       "Pakaian", Icons.shopping_bag_sharp, Colors.green, () {
                     setState(() {
-                      productsFuture =
-                          ProductService().fetchProductsByCategory("pakaian");
+                      productsFuture = ProductService()
+                          .fetchProductsByCategory(context, "pakaian");
                     });
                   }),
                   _buildCategoryButton(
@@ -258,14 +264,14 @@ class _CatalogPageState extends State<CatalogPage> {
                       () {
                     setState(() {
                       productsFuture = ProductService()
-                          .fetchProductsByCategory("kerajinan_tangan");
+                          .fetchProductsByCategory(context, "kerajinan_tangan");
                     });
                   }),
                   _buildCategoryButton(
                       "Lain-lain", Icons.more_horiz, Colors.teal, () {
                     setState(() {
-                      productsFuture =
-                          ProductService().fetchProductsByCategory("lain_lain");
+                      productsFuture = ProductService()
+                          .fetchProductsByCategory(context, "lain_lain");
                     });
                   }),
                 ],
@@ -469,11 +475,12 @@ class _CatalogPageState extends State<CatalogPage> {
 
                       if (confirm == true) {
                         try {
-                          bool success =
-                              await ProductService().deleteProduct(product.pk);
+                          bool success = await ProductService()
+                              .deleteProduct(context, product.pk);
                           if (success) {
                             setState(() {
-                              productsFuture = ProductService().fetchProducts();
+                              productsFuture =
+                                  ProductService().fetchProducts(context);
                             });
 
                             if (context.mounted) {

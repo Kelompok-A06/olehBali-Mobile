@@ -15,8 +15,8 @@ class Community extends StatefulWidget {
 class _CommunityState extends State<Community> {
   List<Post> posts = [];
   bool _isLoading = false;
-  //final String baseUrl = 'http://127.0.0.1:8000/community/';
-  final String baseUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/';
+  final String baseUrl = 'http://127.0.0.1:8000/community/';
+  // final String baseUrl = 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/';
   late final CookieRequest cookieRequest;
 
   @override
@@ -32,14 +32,15 @@ class _CommunityState extends State<Community> {
     setState(() => _isLoading = true);
 
     try {
-      final postService = PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
-      
+      final postService =
+          PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
+
       print('Fetching posts from: ${baseUrl}json/');
-      
+
       final fetchedPosts = await postService.fetchPosts();
-      
+
       print('Fetched ${fetchedPosts.length} posts');
-      
+
       setState(() {
         posts = fetchedPosts;
       });
@@ -69,32 +70,31 @@ class _CommunityState extends State<Community> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "Oleh",
-                    style: GoogleFonts.lato(
-                      textStyle: const TextStyle(
-                        color: Color.fromARGB(255, 3, 164, 193),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    )
-                  ),
+                      text: "Oleh",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Color.fromARGB(255, 3, 164, 193),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      )),
                   TextSpan(
-                    text: "Bali",
-                    style: GoogleFonts.lato(
-                      textStyle: const TextStyle(
-                        color: Color.fromARGB(255, 254, 150, 66),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    )
-                  ),
+                      text: "Bali",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Color.fromARGB(255, 254, 150, 66),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      )),
                 ],
               ),
             ),
           ],
         ),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
+        iconTheme:
+            const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
       ),
       drawer: const LeftDrawer(),
       body: Stack(
@@ -135,7 +135,10 @@ class _CommunityState extends State<Community> {
                     children: [
                       Text(
                         'Community',
-                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 16),
@@ -150,7 +153,7 @@ class _CommunityState extends State<Community> {
                 ),
                 _isLoading
                     ? Center(child: CircularProgressIndicator())
-                    : posts.isEmpty 
+                    : posts.isEmpty
                         ? Center(child: Text('No posts available'))
                         : ListView.builder(
                             shrinkWrap: true,
@@ -159,7 +162,9 @@ class _CommunityState extends State<Community> {
                             itemBuilder: (context, index) {
                               final post = posts[index];
                               print('Rendering post ${index}: ${post.title}');
-                                                     return PostCard(post: post, onDelete: () => _deletePost(post));
+                              return PostCard(
+                                  post: post,
+                                  onDelete: () => _deletePost(post));
                             },
                           ),
                 SizedBox(height: 80), // Add some space at the bottom
@@ -193,97 +198,100 @@ class _CommunityState extends State<Community> {
       ),
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.7,  // Akan menampilkan 70% dari layar
-          minChildSize: 0.5,      // Minimum 50% dari layar
-          maxChildSize: 0.95,     // Maximum 95% dari layar
-          builder: (_, controller) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              padding: EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                top: 16.0,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
-              ),
-              child: ListView(
-                controller: controller,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      margin: EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(2),
+            initialChildSize: 0.7, // Akan menampilkan 70% dari layar
+            minChildSize: 0.5, // Minimum 50% dari layar
+            maxChildSize: 0.95, // Maximum 95% dari layar
+            builder: (_, controller) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                padding: EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                  top: 16.0,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
+                ),
+                child: ListView(
+                  controller: controller,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 4,
+                        margin: EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    'Create a New Post',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 16),
-                  TextField(
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      labelText: 'Title',
-                      border: OutlineInputBorder(),
+                    Text(
+                      'Create a New Post',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  TextField(
-                    controller: _contentController,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      labelText: 'Content',
-                      border: OutlineInputBorder(),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: _titleController,
+                      decoration: InputDecoration(
+                        labelText: 'Title',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_titleController.text.isEmpty || _contentController.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Please fill in all fields')),
-                        );
-                        return;
-                      }
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: _contentController,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        labelText: 'Content',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_titleController.text.isEmpty ||
+                            _contentController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Please fill in all fields')),
+                          );
+                          return;
+                        }
 
-                      try {
-                        final postService = PostService(
-                          activeUrl: baseUrl,
-                          cookieRequest: cookieRequest,
-                        );
-                        final newPost = await postService.createPost(
-                          title: _titleController.text,
-                          content: _contentController.text,
-                        );
+                        try {
+                          final postService = PostService(
+                            activeUrl: baseUrl,
+                            cookieRequest: cookieRequest,
+                          );
+                          final newPost = await postService.createPost(
+                            title: _titleController.text,
+                            content: _contentController.text,
+                          );
 
-                        setState(() {
-                          posts.insert(0, newPost);
-                        });
+                          setState(() {
+                            posts.insert(0, newPost);
+                          });
 
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Post created successfully!')),
-                        );
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Error creating post: $e')),
-                        );
-                      }
-                    },
-                    child: Text('Create Post'),
-                  ),
-                ],
-              ),
-            );
-          }
-        );
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Post created successfully!')),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error creating post: $e')),
+                          );
+                        }
+                      },
+                      child: Text('Create Post'),
+                    ),
+                  ],
+                ),
+              );
+            });
       },
     );
   }
@@ -297,7 +305,8 @@ class _CommunityState extends State<Community> {
     }
 
     try {
-      final postService = PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
+      final postService =
+          PostService(activeUrl: baseUrl, cookieRequest: cookieRequest);
       final success = await postService.deletePost(post.id);
 
       if (success) {
@@ -385,13 +394,15 @@ class PostCard extends StatelessWidget {
                         ),
                         if (post.isAuthor)
                           IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red, size: 20),
+                            icon:
+                                Icon(Icons.delete, color: Colors.red, size: 20),
                             onPressed: () {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
                                   title: Text('Delete Post'),
-                                  content: Text('Are you sure you want to delete this post?'),
+                                  content: Text(
+                                      'Are you sure you want to delete this post?'),
                                   actions: [
                                     TextButton(
                                       child: Text('Cancel'),
