@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:provider/provider.dart';
-//import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:olehbali_mobile/community/models/post.dart';
 import 'package:olehbali_mobile/community/screens/post_service.dart';
 
@@ -18,6 +18,13 @@ class _PostFormState extends State<PostForm> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   bool _isLoading = false;
+  late CookieRequest cookieRequest;
+
+  @override
+  void initState() {
+    super.initState();
+    cookieRequest = Provider.of<CookieRequest>(context, listen: false);
+  }
 
   @override
   void dispose() {
@@ -74,13 +81,14 @@ class _PostFormState extends State<PostForm> {
 
                 try {
                   final postService = PostService(
-                    activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-flutter/',
+                    //activeUrl: 'http://127.0.0.1:8000/community/',
+                    activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/',
+                    cookieRequest: cookieRequest,
                   );
 
                   final newPost = await postService.createPost(
                     title: _titleController.text,
                     content: _contentController.text,
-                    authorId: 1, // Ganti dengan ID user yang sesuai
                   );
 
                   widget.onPostCreated(newPost);
