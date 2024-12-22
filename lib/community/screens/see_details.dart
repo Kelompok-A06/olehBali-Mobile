@@ -27,8 +27,8 @@ class _SeeDetailsState extends State<SeeDetails> {
     super.initState();
     cookieRequest = Provider.of<CookieRequest>(context, listen: false);
     _postService = PostService(
-      // activeUrl: 'http://127.0.0.1:8000/community/',
-      activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/',
+      activeUrl: 'http://127.0.0.1:8000/community/',
+      // activeUrl: 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/',
       cookieRequest: cookieRequest,
     );
     fetchComments();

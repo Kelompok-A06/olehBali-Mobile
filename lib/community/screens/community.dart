@@ -17,9 +17,9 @@ class Community extends StatefulWidget {
 class _CommunityState extends State<Community> {
   List<Post> posts = [];
   bool _isLoading = false;
-  // final String baseUrl = 'http://127.0.0.1:8000/community/';
-  final String baseUrl =
-      'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/';
+  final String baseUrl = 'http://127.0.0.1:8000/community/';
+  // final String baseUrl =
+  //     'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/community/';
   late final CookieRequest cookieRequest;
 
   @override

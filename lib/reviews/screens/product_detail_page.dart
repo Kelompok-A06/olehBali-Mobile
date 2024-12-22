@@ -33,10 +33,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     int productId = widget.productId;
 
     // Fetch informasi produk
-    // final response1 =
-    // await request.get('127.0.0.1:8000/product/api-product/$productId');
-    final response1 = await request.get(
-        'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-product/$productId');
+    final response1 =
+        await request.get('127.0.0.1:8000/product/api-product/$productId');
+    // final response1 = await request.get(
+    // 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api-product/$productId');
     var dataProduct = response1;
     averageRating = 0;
     if (dataProduct[0] != null) {
@@ -44,10 +44,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     // Fetch data review-review product
-    // final response2 =
-    // await request.get('127.0.0.1:8000/product/api/$productId');
-    final response2 = await request.get(
-        'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api/$productId');
+    final response2 =
+        await request.get('127.0.0.1:8000/product/api/$productId');
+    // final response2 = await request.get(
+    // 'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/product/api/$productId');
     var data = response2;
     List<Reviews2> listReview = [];
     for (var d in data) {

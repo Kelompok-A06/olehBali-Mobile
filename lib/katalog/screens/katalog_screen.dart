@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/katalog/models/product.dart';
 import 'package:olehbali_mobile/katalog/screens/addproduct_form.dart';
@@ -11,8 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../reviews/screens/product_detail_page.dart';
 
 class ProductService {
-  // static const String apiUrl = 'http://127.0.0.1:8000/api';
-  // static const String catalogUrl = 'http://127.0.0.1:8000/catalog';
   static const String apiUrl =
       'https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/api';
   static const String catalogUrl =
@@ -21,9 +18,8 @@ class ProductService {
   static String? currentUserRole;
   static String? currentUsername;
 
-  Future<List<Product>> fetchProducts(BuildContext context) async {
-    final request = context.read<CookieRequest>();
-    final response = await request.get(apiUrl);
+  Future<List<Product>> fetchProducts() async {
+    final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -33,10 +29,8 @@ class ProductService {
     }
   }
 
-  Future<List<Product>> fetchProductsByCategory(
-      BuildContext context, String category) async {
-    final request = context.read<CookieRequest>();
-    final response = await request.get('$apiUrl/category/$category');
+  Future<List<Product>> fetchProductsByCategory(String category) async {
+    final response = await http.get(Uri.parse('$apiUrl/category/$category'));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -46,10 +40,8 @@ class ProductService {
     }
   }
 
-  Future<List<Product>> fetchProductsBySearch(
-      BuildContext context, String searchQuery) async {
-    final request = context.read<CookieRequest>();
-    final response = await request.get('$apiUrl?search=$searchQuery');
+  Future<List<Product>> fetchProductsBySearch(String searchQuery) async {
+    final response = await http.get(Uri.parse('$apiUrl?search=$searchQuery'));
 
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -68,13 +60,17 @@ class ProductService {
     return csrfToken ?? '';
   }
 
-  Future<bool> deleteProduct(BuildContext context, int productId) async {
+  Future<bool> deleteProduct(int productId) async {
     try {
-      final request = context.read<CookieRequest>();
+      final csrfToken = await getCsrfToken();
 
-      final response = await request.post(
-        '$apiUrl/delete_product/$productId/',
-        {},
+      final response = await http.delete(
+        Uri.parse('$apiUrl/delete_product/$productId/'),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+          'Cookie': 'csrftoken=$csrfToken',
+        },
       );
 
       if (response.statusCode == 200) {
@@ -89,25 +85,25 @@ class ProductService {
     }
   }
 
-  static Future<void> fetchCurrentUser(BuildContext context) async {
+  static Future<void> fetchCurrentUser() async {
     try {
-      final request = context.watch<CookieRequest>();
-      final response = await request.get(
-        ('$apiUrl/user/'),
+      final response = await http.get(
+        Uri.parse('$apiUrl/user/'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       );
 
-      if (response != null) {
-        currentUsername = response['username'];
-        currentUserRole = response['role'];
+      if (response.statusCode == 200) {
+        final userData = json.decode(response.body);
+        currentUsername = userData['username'];
+        currentUserRole = userData['role'];
       } else {
-        print(
-            'User data: ${response["username"]}, ${response["role"]}'); // assuming username and role are the attributes
         currentUsername = null;
         currentUserRole = null;
-        throw Exception('Failed to load user data');
+        throw Exception('Failed to load user data: ${response.statusCode}');
       }
     } catch (e) {
-      print('User data error: ${e.toString()}'); // print the error message
       currentUsername = null;
       currentUserRole = null;
       rethrow;
@@ -123,8 +119,7 @@ class CatalogPage extends StatefulWidget {
 }
 
 class _CatalogPageState extends State<CatalogPage> {
-  late Future<List<Product>> productsFuture =
-      ProductService().fetchProducts(context);
+  late Future<List<Product>> productsFuture = ProductService().fetchProducts();
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -134,9 +129,9 @@ class _CatalogPageState extends State<CatalogPage> {
   }
 
   Future<void> _initializeData() async {
-    await ProductService.fetchCurrentUser(context);
+    await ProductService.fetchCurrentUser();
     setState(() {
-      productsFuture = ProductService().fetchProducts(context);
+      productsFuture = ProductService().fetchProducts();
     });
   }
 
@@ -145,40 +140,16 @@ class _CatalogPageState extends State<CatalogPage> {
     return Scaffold(
       drawer: const LeftDrawer(),
       appBar: AppBar(
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/images/logo_olehBali.png',
-              fit: BoxFit.contain,
-              height: 42,
-            ),
-            const SizedBox(width: 8),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                      text: "Oleh",
-                      style: GoogleFonts.lato(
-                        textStyle: const TextStyle(
-                          color: Color.fromARGB(255, 3, 164, 193),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      )),
-                  TextSpan(
-                      text: "Bali",
-                      style: GoogleFonts.lato(
-                        textStyle: const TextStyle(
-                          color: Color.fromARGB(255, 254, 150, 66),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          ],
-        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CircleAvatar(
+                // backgroundImage: NetworkImage('https://example.com/your-avatar-url'),
+                ),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -226,8 +197,7 @@ class _CatalogPageState extends State<CatalogPage> {
                         onPressed: () {
                           setState(() {
                             productsFuture = ProductService()
-                                .fetchProductsBySearch(
-                                    context, _searchController.text);
+                                .fetchProductsBySearch(_searchController.text);
                           });
                         },
                         padding: const EdgeInsets.all(8.0),
@@ -258,7 +228,7 @@ class _CatalogPageState extends State<CatalogPage> {
                             onProductAdded: () {
                               setState(() {
                                 productsFuture =
-                                    ProductService().fetchProducts(context);
+                                    ProductService().fetchProducts();
                               });
                             },
                           ),
@@ -268,21 +238,21 @@ class _CatalogPageState extends State<CatalogPage> {
                   _buildCategoryButton("All", Icons.view_list, Colors.black,
                       () {
                     setState(() {
-                      productsFuture = ProductService().fetchProducts(context);
+                      productsFuture = ProductService().fetchProducts();
                     });
                   }),
                   _buildCategoryButton(
                       "Makanan/Minuman", Icons.fastfood_sharp, Colors.red, () {
                     setState(() {
                       productsFuture = ProductService()
-                          .fetchProductsByCategory(context, "makanan_minuman");
+                          .fetchProductsByCategory("makanan_minuman");
                     });
                   }),
                   _buildCategoryButton(
                       "Pakaian", Icons.shopping_bag_sharp, Colors.green, () {
                     setState(() {
-                      productsFuture = ProductService()
-                          .fetchProductsByCategory(context, "pakaian");
+                      productsFuture =
+                          ProductService().fetchProductsByCategory("pakaian");
                     });
                   }),
                   _buildCategoryButton(
@@ -290,14 +260,14 @@ class _CatalogPageState extends State<CatalogPage> {
                       () {
                     setState(() {
                       productsFuture = ProductService()
-                          .fetchProductsByCategory(context, "kerajinan_tangan");
+                          .fetchProductsByCategory("kerajinan_tangan");
                     });
                   }),
                   _buildCategoryButton(
                       "Lain-lain", Icons.more_horiz, Colors.teal, () {
                     setState(() {
-                      productsFuture = ProductService()
-                          .fetchProductsByCategory(context, "lain_lain");
+                      productsFuture =
+                          ProductService().fetchProductsByCategory("lain_lain");
                     });
                   }),
                 ],
@@ -307,32 +277,37 @@ class _CatalogPageState extends State<CatalogPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: FutureBuilder<List<Product>>(
-                future: productsFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (snapshot.hasData) {
-                    return GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // Set the number of columns
-                        childAspectRatio: 2 / 3,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 8,
-                      ),
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        final product = snapshot.data![index];
-                        return _buildProductCard(product);
-                      },
-                    );
-                  } else {
-                    return const Center(child: Text('No products found'));
-                  }
-                },
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height - 200,
+                  child: FutureBuilder<List<Product>>(
+                    future: productsFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData) {
+                        return GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200,
+                            childAspectRatio: 2 / 3,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+                          ),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final product = snapshot.data![index];
+                            return _buildProductCard(product);
+                          },
+                        );
+                      } else {
+                        return const Center(child: Text('No products found'));
+                      }
+                    },
+                  ),
+                ),
               ),
             ),
           ),
@@ -501,12 +476,11 @@ class _CatalogPageState extends State<CatalogPage> {
 
                       if (confirm == true) {
                         try {
-                          bool success = await ProductService()
-                              .deleteProduct(context, product.pk);
+                          bool success =
+                              await ProductService().deleteProduct(product.pk);
                           if (success) {
                             setState(() {
-                              productsFuture =
-                                  ProductService().fetchProducts(context);
+                              productsFuture = ProductService().fetchProducts();
                             });
 
                             if (context.mounted) {
