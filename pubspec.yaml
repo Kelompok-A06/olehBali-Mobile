@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   image_picker: ^1.0.4
+  google_fonts: ^6.2.1
   flutter:
     sdk: flutter
 
@@ -38,7 +39,6 @@ dependencies:
   provider: ^6.1.2
   pbp_django_auth: ^0.4.0
   http: ^1.2.2
-  google_fonts: ^6.2.1
   pull_to_refresh: ^2.0.0
 
 dev_dependencies:

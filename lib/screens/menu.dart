@@ -108,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
+        iconTheme:
+            const IconThemeData(color: Color.fromARGB(255, 254, 150, 66)),
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
