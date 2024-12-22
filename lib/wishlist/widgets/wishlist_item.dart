@@ -1,5 +1,3 @@
-// lib/widgets/wishlist_item_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:olehbali_mobile/widgets/left_drawer.dart';
 import 'package:olehbali_mobile/wishlist/models/wishlist.dart';

@@ -184,12 +184,12 @@ Widget build(BuildContext context) {
                       }
                     },
                     onMyWishlist: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const WishlistScreen(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WishlistScreen(),
+                        ),
+                      );
                     },
                     onDeleteAccount: () {
                       Navigator.push(

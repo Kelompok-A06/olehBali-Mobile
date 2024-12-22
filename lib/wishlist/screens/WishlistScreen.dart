@@ -22,7 +22,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   void initState() {
     super.initState();
-    // Delay fetching until build method has context
   }
 
   Future<Wishlist> fetchWishlist(BuildContext context) async {
@@ -42,12 +41,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
   Future<void> deleteWishlistItem(BuildContext context, int productId) async {
   final request = context.read<CookieRequest>();
   
-  // Menyiapkan data yang akan dikirim sebagai JSON
   Map<String, dynamic> data = {
     "product_id": productId.toString(),
   };
   
-  // Mengirim permintaan POST dengan data JSON
   final response = await request.postJson(
     "https://muhammad-hibrizi-olehbali.pbp.cs.ui.ac.id/wishlist/json/delete_wishlist_flutter", 
      jsonEncode(data),
@@ -77,22 +74,20 @@ class _WishlistScreenState extends State<WishlistScreen> {
       appBar: AppBar(
         title: Text('Wishlist Anda'),
       ),
+      drawer: const LeftDrawer(),
       body: FutureBuilder<Wishlist>(
         future: _futureWishlist,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // Loading state
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            // Error state
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.wishlistItems.isEmpty) {
-            // Empty wishlist state
+
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Anda dapat menambahkan gambar di sini jika diinginkan
                   SizedBox(height: 20),
                   Text(
                     'Wishlist Anda saat ini kosong.',
